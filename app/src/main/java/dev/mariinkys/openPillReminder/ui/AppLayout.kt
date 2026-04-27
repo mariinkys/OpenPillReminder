@@ -137,7 +137,7 @@ fun AppLayout(
             1 -> SettingsScreen(
                 settings = settings,
                 onSettingsChange = { settingsViewModel.updateSettings(it) },
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
             )
         }
     }

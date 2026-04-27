@@ -10,5 +10,12 @@ data class SettingsState(
     val placebo: Boolean = false,
     val firstPillDate: LocalDate = LocalDate.now(),
     val reminderTime: LocalTime = LocalTime.of(8, 0),
-    val active: Boolean = false
+    val active: Boolean = false,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val useDynamicColor: Boolean = true,
+    val seedColor: Int = 0xFF6750A4.toInt() // Default Material Purple
 )
+
+enum class ThemeMode {
+    SYSTEM, LIGHT, DARK
+}

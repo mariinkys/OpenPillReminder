@@ -1,37 +1,35 @@
 package dev.mariinkys.openPillReminder.ui.settings
 
 import android.app.TimePickerDialog
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import android.os.Build
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import dev.mariinkys.openPillReminder.model.SettingsState
+import dev.mariinkys.openPillReminder.model.ThemeMode
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
@@ -47,123 +45,162 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+    var showColorPicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // Name
-        OutlinedTextField(
-            value = settings.userName,
-            onValueChange = { onSettingsChange(settings.copy(userName = it)) },
-            label = { Text("Your name") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+        // --- SECTION: PROFILE ---
+        SettingsSection(title = "Profile") {
+            OutlinedTextField(
+                value = settings.userName,
+                onValueChange = { onSettingsChange(settings.copy(userName = it)) },
+                label = { Text("Your name") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+        }
 
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(16.dp))
+        // --- SECTION: PILL SCHEDULE ---
+        SettingsSection(title = "Pill Schedule") {
+            SettingsSwitchRow(
+                label = "Activate Reminder Schedule",
+                checked = settings.active,
+                onCheckedChange = { onSettingsChange(settings.copy(active = it)) }
+            )
 
-        // Active Pills
-        OutlinedTextField(
-            value = if (settings.activePills == 0) "" else settings.activePills.toString(),
-            onValueChange = { input ->
-                val numericInput = input.filter { it.isDigit() }
-                onSettingsChange(settings.copy(activePills = numericInput.toIntOrNull() ?: 0))
-            },
-            label = { Text("Active pills") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                OutlinedTextField(
+                    value = settings.activePills.toString(),
+                    onValueChange = { onSettingsChange(settings.copy(activePills = it.toIntOrNull() ?: 0)) },
+                    label = { Text("Active Pills") },
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = settings.breakDays.toString(),
+                    onValueChange = { onSettingsChange(settings.copy(breakDays = it.toIntOrNull() ?: 0)) },
+                    label = { Text("Break Days") },
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
 
-        Spacer(Modifier.height(12.dp))
+            SettingsSwitchRow(
+                label = "Placebo Pills on Break Days",
+                checked = settings.placebo,
+                onCheckedChange = { onSettingsChange(settings.copy(placebo = it)) }
+            )
 
-        // Break Days
-        OutlinedTextField(
-            value = if (settings.breakDays == 0) "" else settings.breakDays.toString(),
-            onValueChange = { onSettingsChange(settings.copy(breakDays = it.toIntOrNull() ?: 0)) },
-            label = { Text("Break days") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        // Placebo
-        SettingsSwitchRow(
-            label = "Placebo pills on break days",
-            checked = settings.placebo,
-            onCheckedChange = { onSettingsChange(settings.copy(placebo = it)) }
-        )
-
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(16.dp))
-
-        // First Pill Date
-        OutlinedTextField(
-            value = settings.firstPillDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            onValueChange = {},
-            label = { Text("First pill date") },
-            readOnly = true,
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            trailingIcon = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("First Pill Date", style = MaterialTheme.typography.bodyLarge)
                 TextButton(onClick = { showDatePicker = true }) {
-                    Text("Pick")
+                    Text(settings.firstPillDate.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")))
                 }
             }
-        )
+        }
 
-        Spacer(Modifier.height(12.dp))
+        // --- SECTION: REMINDERS ---
+        if (settings.active) {
+            SettingsSection(title = "Reminders") {
 
-        // Reminder Time
-        OutlinedTextField(
-            value = settings.reminderTime.format(DateTimeFormatter.ofPattern("HH:mm")),
-            onValueChange = {},
-            label = { Text("Reminder time") },
-            readOnly = true,
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            trailingIcon = {
-                TextButton(onClick = {
-                    TimePickerDialog(
-                        context,
-                        { _, hour, minute ->
-                            onSettingsChange(settings.copy(reminderTime = LocalTime.of(hour, minute)))
-                        },
-                        settings.reminderTime.hour,
-                        settings.reminderTime.minute,
-                        true
-                    ).show()
-                }) {
-                    Text("Pick")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
+                        TextButton(onClick = {
+                            TimePickerDialog(
+                                context,
+                                { _, hour, minute ->
+                                    onSettingsChange(settings.copy(reminderTime = LocalTime.of(hour, minute)))
+                                },
+                                settings.reminderTime.hour,
+                                settings.reminderTime.minute,
+                                true
+                            ).show()
+                        }) {
+                            Text(settings.reminderTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+                        }
+                    }
+
+            }
+        }
+
+        // --- SECTION: APPEARANCE ---
+        SettingsSection(title = "Appearance") {
+            // Theme Selection
+            Text("Theme Mode", style = MaterialTheme.typography.bodyMedium)
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                ThemeMode.entries.forEachIndexed { index, mode ->
+                    SegmentedButton(
+                        selected = settings.themeMode == mode,
+                        onClick = { onSettingsChange(settings.copy(themeMode = mode)) },
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = ThemeMode.entries.size)
+                    ) {
+                        Text(mode.name.lowercase().replaceFirstChar { it.uppercase() })
+                    }
                 }
             }
-        )
 
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(16.dp))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                SettingsSwitchRow(
+                    label = "Dynamic Color (Material You)",
+                    checked = settings.useDynamicColor,
+                    onCheckedChange = { onSettingsChange(settings.copy(useDynamicColor = it)) }
+                )
+            }
 
-        // Active
-        SettingsSwitchRow(
-            label = "Active",
-            checked = settings.active,
-            onCheckedChange = { onSettingsChange(settings.copy(active = it)) }
+            if (!settings.useDynamicColor || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                Text("Accent Color", style = MaterialTheme.typography.bodyMedium)
+                val colorOptions = listOf(0xFF6750A4, 0xFF006A60, 0xFF984061, 0xFF3D662F, 0xFF005FAF)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    colorOptions.forEach { colorLong ->
+                        val colorInt = colorLong.toInt()
+                        ColorDot(
+                            color = Color(colorLong),
+                            isSelected = settings.seedColor == colorInt,
+                            onClick = { onSettingsChange(settings.copy(seedColor = colorInt)) }
+                        )
+                    }
+                    AddColorDot(onClick = { showColorPicker = true })
+                }
+            }
+        }
+    }
+
+    // Color Picker Dialog
+    if (showColorPicker) {
+        ColorPickerDialog(
+            initialColor = Color(settings.seedColor),
+            onColorSelected = { color ->
+                onSettingsChange(settings.copy(seedColor = color.toArgb()))
+                @Suppress("AssignedValueIsNeverRead")
+                showColorPicker = false
+            },
+            onDismiss = {
+                @Suppress("AssignedValueIsNeverRead")
+                showColorPicker = false
+            }
         )
     }
 
 
+    // Date Picker Dialog
     if (showDatePicker) {
         DatePickerDialog(
-
             onDismissRequest = {
                 @Suppress("AssignedValueIsNeverRead")
                 showDatePicker = false },
@@ -182,8 +219,8 @@ fun SettingsScreen(
             dismissButton = {
                 TextButton(onClick = {
                     @Suppress("AssignedValueIsNeverRead")
-                    showDatePicker = false
-                }) { Text("Cancel") }
+                    showDatePicker = false }
+                ) { Text("Cancel") }
             }
         ) {
             DatePicker(state = datePickerState)
@@ -192,17 +229,261 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsSwitchRow(
-    label: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
+private fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        content()
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), thickness = 0.5.dp)
+    }
+}
+
+@Composable
+private fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label)
+        Text(label, style = MaterialTheme.typography.bodyLarge)
         Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
+
+@Composable
+private fun ColorDot(color: Color, isSelected: Boolean, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            drawCircle(color = color)
+        }
+        if (isSelected) {
+            Canvas(modifier = Modifier.size(12.dp)) {
+                drawCircle(color = Color.White)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColorPickerDialog(
+    initialColor: Color,
+    onColorSelected: (Color) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val initialHsv = FloatArray(3)
+    android.graphics.Color.colorToHSV(initialColor.toArgb(), initialHsv)
+
+    var hue by remember { mutableFloatStateOf(initialHsv[0]) }
+    var saturation by remember { mutableFloatStateOf(initialHsv[1]) }
+    var value by remember { mutableFloatStateOf(initialHsv[2]) }
+
+    val selectedColor by remember(hue, saturation, value) {
+        derivedStateOf {
+            Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value)))
+        }
+    }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            tonalElevation = 6.dp
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Text("Pick a Color", style = MaterialTheme.typography.titleLarge)
+
+                // Saturation/Value 2D box
+                SaturationValueBox(
+                    hue = hue,
+                    saturation = saturation,
+                    value = value,
+                    onSaturationValueChange = { s, v ->
+                        saturation = s
+                        value = v
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                )
+
+                // Hue slider
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        "Hue",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    HueSlider(
+                        hue = hue,
+                        onHueChange = { hue = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(28.dp)
+                            .clip(MaterialTheme.shapes.small)
+                    )
+                }
+
+                // Preview + hex label
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(selectedColor)
+                    )
+                    val hexString = remember(selectedColor) {
+                        "#%06X".format(selectedColor.toArgb() and 0xFFFFFF)
+                    }
+                    Text(
+                        hexString,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // Action buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = onDismiss) { Text("Cancel") }
+                    Spacer(Modifier.width(8.dp))
+                    Button(onClick = { onColorSelected(selectedColor) }) { Text("Select") }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SaturationValueBox(
+    hue: Float,
+    saturation: Float,
+    value: Float,
+    onSaturationValueChange: (Float, Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val hueColor = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, 1f, 1f)))
+
+    BoxWithConstraints(modifier = modifier) {
+        val boxW = constraints.maxWidth.toFloat()
+        val boxH = constraints.maxHeight.toFloat()
+
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        onSaturationValueChange(
+                            (offset.x / boxW).coerceIn(0f, 1f),
+                            (1f - offset.y / boxH).coerceIn(0f, 1f)
+                        )
+                    }
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures { change, _ ->
+                        onSaturationValueChange(
+                            (change.position.x / boxW).coerceIn(0f, 1f),
+                            (1f - change.position.y / boxH).coerceIn(0f, 1f)
+                        )
+                    }
+                }
+        ) {
+            // White-to-hue horizontal gradient
+            drawRect(brush = Brush.horizontalGradient(listOf(Color.White, hueColor)))
+            // Transparent-to-black vertical gradient (darkness)
+            drawRect(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
+
+            // Thumb
+            val thumbX = saturation * size.width
+            val thumbY = (1f - value) * size.height
+            drawCircle(color = Color.White, radius = 10.dp.toPx(), center = Offset(thumbX, thumbY))
+            drawCircle(
+                color = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value))),
+                radius = 7.dp.toPx(),
+                center = Offset(thumbX, thumbY)
+            )
+        }
+    }
+}
+
+@Composable
+private fun HueSlider(
+    hue: Float,
+    onHueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val hueGradient = remember {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFFFF0000), Color(0xFFFFFF00), Color(0xFF00FF00),
+                Color(0xFF00FFFF), Color(0xFF0000FF), Color(0xFFFF00FF), Color(0xFFFF0000)
+            )
+        )
+    }
+
+    BoxWithConstraints(modifier = modifier) {
+        val sliderW = constraints.maxWidth.toFloat()
+        val sliderH = constraints.maxHeight.toFloat()
+
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        onHueChange((offset.x / sliderW * 360f).coerceIn(0f, 360f))
+                    }
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures { change, _ ->
+                        onHueChange((change.position.x / sliderW * 360f).coerceIn(0f, 360f))
+                    }
+                }
+        ) {
+            drawRect(brush = hueGradient)
+
+            val thumbX = hue / 360f * size.width
+            val thumbY = size.height / 2f
+            drawCircle(color = Color.White, radius = sliderH / 2f, center = Offset(thumbX, thumbY))
+            drawCircle(
+                color = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, 1f, 1f))),
+                radius = sliderH / 2f - 3.dp.toPx(),
+                center = Offset(thumbX, thumbY)
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddColorDot(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = "Custom color",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
