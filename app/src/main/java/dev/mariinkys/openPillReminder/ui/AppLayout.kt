@@ -39,7 +39,8 @@ import android.content.Context
 @Composable
 fun AppLayout(
     settingsViewModel: SettingsViewModel = viewModel(),
-    homeViewModel: HomeViewModel = viewModel()
+    homeViewModel: HomeViewModel = viewModel(),
+    notificationDate: String? = null,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
 
@@ -124,7 +125,8 @@ fun AppLayout(
             0 -> HomeScreen(
                 settings = settings,
                 modifier = Modifier.padding(innerPadding),
-                viewModel = homeViewModel
+                viewModel = homeViewModel,
+                notificationDate = notificationDate,
             )
             1 -> SettingsScreen(
                 settings = settings,

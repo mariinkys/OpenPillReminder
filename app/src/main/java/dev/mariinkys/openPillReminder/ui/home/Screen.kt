@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +51,8 @@ private const val TOTAL_DAYS = 365
 fun HomeScreen(
     settings: SettingsState,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    notificationDate: String? = null,
 ) {
     val pillLogs by viewModel.pillLogs.collectAsState()
 
@@ -84,6 +86,13 @@ fun HomeScreen(
     )
 
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+
+    // If we opened the app from a notification we grab the date from the notification
+    LaunchedEffect(notificationDate) {
+        notificationDate?.let {
+            selectedDate = LocalDate.parse(it)
+        }
+    }
 
     Column(modifier = modifier.fillMaxSize()) {
         // Page indicator dots

@@ -30,7 +30,7 @@ class PillAlarmReceiver : BroadcastReceiver() {
                     val isBreakDay = positionInCycle >= settings.activePills
 
                     if (!isBreakDay || settings.placebo) {
-                        sendPillNotification(context, settings.userName, isBreakDay)
+                        sendPillNotification(context, settings.userName, isBreakDay, today)
                     }
                 }
 
