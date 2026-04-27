@@ -23,14 +23,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.mariinkys.openPillReminder.ui.home.HomeScreen
+import dev.mariinkys.openPillReminder.ui.home.HomeViewModel
 import dev.mariinkys.openPillReminder.ui.settings.SettingsScreen
 import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppLayout(viewModel: SettingsViewModel = viewModel()) {
+fun AppLayout(
+    settingsViewModel: SettingsViewModel = viewModel(),
+    homeViewModel: HomeViewModel = viewModel()
+) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    val settings by viewModel.settings.collectAsState()
+    val settings by settingsViewModel.settings.collectAsState()
 
     val tabs = listOf(
         Pair("Home", Icons.Default.Home),
@@ -62,10 +67,14 @@ fun AppLayout(viewModel: SettingsViewModel = viewModel()) {
         }
     ) { innerPadding ->
         when (selectedTab) {
-            0 -> HomeScreen(settings = settings, modifier = Modifier.padding(innerPadding))
+            0 -> HomeScreen(
+                settings = settings,
+                modifier = Modifier.padding(innerPadding),
+                viewModel = homeViewModel
+            )
             1 -> SettingsScreen(
                 settings = settings,
-                onSettingsChange = { viewModel.updateSettings(it) },
+                onSettingsChange = { settingsViewModel.updateSettings(it) },
                 modifier = Modifier.padding(innerPadding)
             )
         }
