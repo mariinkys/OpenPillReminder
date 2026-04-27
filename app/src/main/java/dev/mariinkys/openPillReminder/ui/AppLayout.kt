@@ -32,9 +32,8 @@ fun AppLayout(viewModel: SettingsViewModel = viewModel()) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val settings by viewModel.settings.collectAsState()
 
-    // TODO: Don't show ',' if userName is not set
     val tabs = listOf(
-        Pair("Hello, ${settings.userName}", Icons.Default.Home),
+        Pair("Home", Icons.Default.Home),
         Pair("Settings", Icons.Default.Settings)
     )
 
