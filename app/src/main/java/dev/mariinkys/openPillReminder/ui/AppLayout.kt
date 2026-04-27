@@ -102,7 +102,13 @@ fun AppLayout(
             TopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(tabs[selectedTab].first)
+                        val topBarTitle = if (selectedTab == 0) {
+                            if (settings.userName.isNotBlank()) "Welcome, ${settings.userName}" else "Welcome"
+                        } else {
+                            "Settings"
+                        }
+
+                        Text(topBarTitle)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors()
