@@ -2,51 +2,30 @@ package dev.mariinkys.openPillReminder.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
+import dev.mariinkys.openPillReminder.model.SettingsState
+import dev.mariinkys.openPillReminder.model.ThemeMode
 
 @Composable
 fun OpenPillReminderTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    settings: SettingsState,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when (settings.themeMode) {
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        settings.useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> generateColorSchemeFromSeed(settings.seedColor, darkTheme)
     }
 
     MaterialTheme(
@@ -54,4 +33,57 @@ fun OpenPillReminderTheme(
         typography = Typography,
         content = content
     )
+}
+
+private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorScheme {
+    // Derive tonal variations by blending with black/white
+    fun tone(color: Int, factor: Float): Color {
+        val blend = if (factor > 0) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
+        val amount = kotlin.math.abs(factor)
+        val r = ((color shr 16 and 0xFF) * (1 - amount) + (blend shr 16 and 0xFF) * amount).toInt()
+        val g = ((color shr 8 and 0xFF) * (1 - amount) + (blend shr 8 and 0xFF) * amount).toInt()
+        val b = ((color and 0xFF) * (1 - amount) + (blend and 0xFF) * amount).toInt()
+        return Color(r, g, b)
+    }
+
+    fun luminance(color: Int): Float {
+        val r = (color shr 16 and 0xFF) / 255f
+        val g = (color shr 8 and 0xFF) / 255f
+        val b = (color and 0xFF) / 255f
+        return 0.2126f * r + 0.7152f * g + 0.0722f * b
+    }
+
+    val onSeedColor = if (luminance(seedColor) > 0.5f) Color.Black else Color.White
+
+    return if (isDark) {
+        darkColorScheme(
+            primary = tone(seedColor, 0.6f),
+            onPrimary = Color.Black,
+            primaryContainer = tone(seedColor, -0.2f),
+            onPrimaryContainer = tone(seedColor, 0.8f),
+            secondary = tone(seedColor, 0.4f),
+            onSecondary = Color.Black,
+            secondaryContainer = tone(seedColor, -0.3f),
+            onSecondaryContainer = tone(seedColor, 0.7f),
+            tertiary = tone(seedColor, 0.5f),
+            onTertiary = Color.Black,
+            tertiaryContainer = tone(seedColor, -0.25f),
+            onTertiaryContainer = tone(seedColor, 0.75f),
+        )
+    } else {
+        lightColorScheme(
+            primary = Color(seedColor),
+            onPrimary = onSeedColor,
+            primaryContainer = tone(seedColor, 0.8f),
+            onPrimaryContainer = tone(seedColor, -0.6f),
+            secondary = tone(seedColor, -0.2f),
+            onSecondary = onSeedColor,
+            secondaryContainer = tone(seedColor, 0.7f),
+            onSecondaryContainer = tone(seedColor, -0.5f),
+            tertiary = tone(seedColor, -0.1f),
+            onTertiary = onSeedColor,
+            tertiaryContainer = tone(seedColor, 0.75f),
+            onTertiaryContainer = tone(seedColor, -0.55f),
+        )
+    }
 }
