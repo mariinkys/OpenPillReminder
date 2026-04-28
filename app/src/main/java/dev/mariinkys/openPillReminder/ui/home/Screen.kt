@@ -308,8 +308,8 @@ fun PillBubble(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(date.format(formatterDay), color = contentColor)
-            Text(date.format(formatterDate), color = contentColor)
+            Text(date.format(formatterDay), color = contentColor, style = MaterialTheme.typography.labelMedium)
+            Text(date.format(formatterDate), color = contentColor, style = MaterialTheme.typography.labelMedium)
         }
     }
 }
