@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img alt="App Icon" src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="192" />
+  <img alt="App Icon" src="./resources/icons/icon-scalable.svg" width="120" />
   <h1>OpenPillReminder</h1>
 
   ![GitHub License](https://img.shields.io/github/license/mariinkys/OpenPillReminder)
@@ -9,7 +9,7 @@
 
   <h3>OpenPillReminder is an open source lady pill tracker for Android</h3>
 
-  <img alt="Main Window" width="320" src="./screenshots/main.png"/>
+  <img alt="Main Window" width="320" src="resources/screenshots/main-light.png"/>
 
 </div>
 

@@ -47,7 +47,7 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         "Time to take your pill$namePart!"
 
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-        .setSmallIcon(android.R.drawable.ic_dialog_info)
+        .setSmallIcon(R.drawable.ic_stat_name)
         .setContentTitle(title)
         .setContentText(message)
         .setContentIntent(pendingIntent)

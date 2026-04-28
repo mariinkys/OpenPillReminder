@@ -54,7 +54,7 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // --- SECTION: PROFILE ---
+        // PROFILE
         SettingsSection(title = "Profile") {
             OutlinedTextField(
                 value = settings.userName,
@@ -65,7 +65,7 @@ fun SettingsScreen(
             )
         }
 
-        // --- SECTION: PILL SCHEDULE ---
+        // PILL SCHEDULE
         SettingsSection(title = "Pill Schedule") {
             SettingsSwitchRow(
                 label = "Activate Reminder Schedule",
@@ -108,7 +108,7 @@ fun SettingsScreen(
             }
         }
 
-        // --- SECTION: REMINDERS ---
+        // REMINDERS
         if (settings.active) {
             SettingsSection(title = "Reminders") {
 
@@ -136,7 +136,7 @@ fun SettingsScreen(
             }
         }
 
-        // --- SECTION: APPEARANCE ---
+        // APPEARANCE
         SettingsSection(title = "Appearance") {
             // Theme Selection
             Text("Theme Mode", style = MaterialTheme.typography.bodyMedium)
@@ -302,7 +302,6 @@ private fun ColorPickerDialog(
             ) {
                 Text("Pick a Color", style = MaterialTheme.typography.titleLarge)
 
-                // Saturation/Value 2D box
                 SaturationValueBox(
                     hue = hue,
                     saturation = saturation,
@@ -355,7 +354,7 @@ private fun ColorPickerDialog(
                     )
                 }
 
-                // Action buttons
+                // buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
