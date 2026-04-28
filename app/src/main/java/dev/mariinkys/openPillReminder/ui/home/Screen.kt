@@ -20,6 +20,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -66,6 +67,9 @@ fun HomeScreen(
         }
         return
     }
+
+    // Formatter for month and year text
+    val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy")
 
     val firstDate = settings.firstPillDate
     val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1)
@@ -118,12 +122,25 @@ fun HomeScreen(
         //            }
         //        }
 
+
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { pageIndex ->
             val pageDates = pages[pageIndex]
             val startIndex = pageIndex * PAGE_SIZE
+
+            val firstVisibleDate = pageDates.first()
+            val lastVisibleDate = pageDates.last()
+
+            val monthRangeText = if (firstVisibleDate.month == lastVisibleDate.month &&
+                firstVisibleDate.year == lastVisibleDate.year
+            ) {
+                firstVisibleDate.format(monthFormatter)
+            } else {
+                "${firstVisibleDate.format(monthFormatter)} - ${lastVisibleDate.format(monthFormatter)}"
+            }
 
             Column(
                 modifier = Modifier
@@ -158,6 +175,11 @@ fun HomeScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = monthRangeText,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
