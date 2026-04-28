@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -266,10 +265,17 @@ fun PillBubble(
     val today = LocalDate.now()
     val isToday = date == today
 
+    val colors = MaterialTheme.colorScheme
     val targetColor = when {
-        isTaken -> Color(0xFF4CAF50)
-        isBreakDay -> Color(0xFF838080)
-        else -> Color(0xFFFF6F91)
+        isTaken -> colors.primary          // completed → main action color
+        isBreakDay -> colors.outline       // neutral / inactive
+        else -> colors.tertiary            // upcoming / active pill
+    }
+
+    val contentColor = when {
+        isTaken -> colors.onPrimary
+        isBreakDay -> colors.onSurfaceVariant
+        else -> colors.onSecondary
     }
 
     val animatedColor by animateColorAsState(targetValue = targetColor, label = "")
@@ -281,12 +287,16 @@ fun PillBubble(
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
-                alpha = if (isFuture) 0.4f else 1f
+                alpha = when {
+                    isFuture -> 0.4f
+                    !isTaken -> 0.7f
+                    else -> 1f
+                }
             }
             .clip(CircleShape)
             .background(animatedColor)
             .then(
-                if (isToday) Modifier.border(2.dp, Color.Yellow, CircleShape) else Modifier
+                if (isToday) Modifier.border(2.dp, colors.error, CircleShape) else Modifier
             )
             .then(
                 if (!isFuture) Modifier.clickable(
@@ -298,8 +308,8 @@ fun PillBubble(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(date.format(formatterDay))
-            Text(date.format(formatterDate))
+            Text(date.format(formatterDay), color = contentColor)
+            Text(date.format(formatterDate), color = contentColor)
         }
     }
 }
