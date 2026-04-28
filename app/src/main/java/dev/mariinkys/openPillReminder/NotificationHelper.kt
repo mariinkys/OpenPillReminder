@@ -58,3 +58,18 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     manager.notify(1, notification)
 }
+
+fun sendBuyingNotification(context: Context, userName: String) {
+    val namePart = userName.trim().takeIf { it.isNotEmpty() }?.let { ", $it" } ?: ""
+
+    val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_stat_name)
+        .setContentTitle("Refill Reminder")
+        .setContentText("Time to buy your next pack$namePart!")
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setAutoCancel(true)
+        .build()
+
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    manager.notify(2, notification)
+}

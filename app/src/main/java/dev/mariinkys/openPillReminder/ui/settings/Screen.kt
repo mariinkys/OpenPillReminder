@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.model.ThemeMode
+import dev.mariinkys.openPillReminder.model.toDisplayString
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
@@ -69,12 +70,6 @@ fun SettingsScreen(
 
         // PILL SCHEDULE
         SettingsSection(title = "Pill Schedule") {
-            SettingsSwitchRow(
-                label = "Activate Reminder Schedule",
-                checked = settings.active,
-                onCheckedChange = { onSettingsChange(settings.copy(active = it)) }
-            )
-
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 OutlinedTextField(
                     value = settings.activePills.toString(),
@@ -108,35 +103,92 @@ fun SettingsScreen(
                     Text(settings.firstPillDate.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")))
                 }
             }
-        }
 
-        // REMINDERS
-        if (settings.active) {
-            SettingsSection(title = "Reminders") {
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
-                        TextButton(onClick = {
-                            TimePickerDialog(
-                                context,
-                                { _, hour, minute ->
-                                    onSettingsChange(settings.copy(reminderTime = LocalTime.of(hour, minute)))
-                                },
-                                settings.reminderTime.hour,
-                                settings.reminderTime.minute,
-                                true
-                            ).show()
-                        }) {
-                            Text(settings.reminderTime.format(DateTimeFormatter.ofPattern("HH:mm")))
-                        }
-                    }
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
+                TextButton(onClick = {
+                    TimePickerDialog(
+                        context,
+                        { _, hour, minute ->
+                            onSettingsChange(settings.copy(reminderTime = LocalTime.of(hour, minute)))
+                        },
+                        settings.reminderTime.hour,
+                        settings.reminderTime.minute,
+                        true
+                    ).show()
+                }) {
+                    Text(settings.reminderTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+                }
             }
         }
+
+        // Pill Buying Reminder
+        SettingsSection(title = "Pill Buying Reminder") {
+            SettingsSwitchRow(
+                label = "Enable Buying Reminder",
+                checked = settings.buyingReminder,
+                onCheckedChange = { onSettingsChange(settings.copy(buyingReminder = it)) }
+            )
+
+            if (settings.buyingReminder) {
+                var showBuyingScheduleMenu by remember { mutableStateOf(false) }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Reminder Day", style = MaterialTheme.typography.bodyLarge)
+                    Box {
+                        TextButton(onClick = { showBuyingScheduleMenu = true }) {
+                            Text(settings.buyingReminderSchedule.toDisplayString())
+                        }
+                        DropdownMenu(
+                            expanded = showBuyingScheduleMenu,
+                            onDismissRequest = { showBuyingScheduleMenu = false }
+                        ) {
+                            dev.mariinkys.openPillReminder.model.BuyingReminderSchedule.entries.forEach { schedule ->
+                                DropdownMenuItem(
+                                    text = { Text(schedule.toDisplayString()) },
+                                    onClick = {
+                                        onSettingsChange(settings.copy(buyingReminderSchedule = schedule))
+                                        showBuyingScheduleMenu = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Time Selection
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
+                    TextButton(onClick = {
+                        TimePickerDialog(
+                            context,
+                            { _, hour, minute ->
+                                onSettingsChange(settings.copy(buyingReminderTime = LocalTime.of(hour, minute)))
+                            },
+                            settings.buyingReminderTime.hour,
+                            settings.buyingReminderTime.minute,
+                            true
+                        ).show()
+                    }) {
+                        Text(settings.buyingReminderTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+                    }
+                }
+            }
+        }
+
 
         // APPEARANCE
         SettingsSection(title = "Appearance") {

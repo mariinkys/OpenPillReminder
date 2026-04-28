@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.mariinkys.openPillReminder.model.BuyingReminderSchedule
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.model.ThemeMode
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +26,10 @@ object SettingsKeys {
     val FIRST_PILL_DATE = stringPreferencesKey("first_pill_date")
     val REMINDER_HOUR = intPreferencesKey("reminder_hour")
     val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
-    val ACTIVE = booleanPreferencesKey("active")
+    val BUYING_REMINDER = booleanPreferencesKey("buying_reminder")
+    val BUYING_REMINDER_SCHEDULE = stringPreferencesKey("buying_reminder_schedule")
+    val BUYING_REMINDER_HOUR = intPreferencesKey("buying_reminder_hour")
+    val BUYING_REMINDER_MINUTE = intPreferencesKey("buying_reminder_minute")
     val THEME_MODE = stringPreferencesKey("theme_mode")
     val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
     val SEED_COLOR = intPreferencesKey("seed_color")
@@ -46,7 +50,12 @@ class SettingsRepository(private val context: Context) {
                 prefs[SettingsKeys.REMINDER_HOUR] ?: 8,
                 prefs[SettingsKeys.REMINDER_MINUTE] ?: 0
             ),
-            active = prefs[SettingsKeys.ACTIVE] ?: false,
+            buyingReminder = prefs[SettingsKeys.BUYING_REMINDER] ?: false,
+            buyingReminderSchedule = BuyingReminderSchedule.valueOf(prefs[SettingsKeys.BUYING_REMINDER_SCHEDULE] ?: BuyingReminderSchedule.FirstPillDate.name),
+            buyingReminderTime = LocalTime.of(
+                prefs[SettingsKeys.BUYING_REMINDER_HOUR] ?: 8,
+                prefs[SettingsKeys.BUYING_REMINDER_MINUTE] ?: 0
+            ),
             themeMode = ThemeMode.valueOf(prefs[SettingsKeys.THEME_MODE] ?: ThemeMode.SYSTEM.name),
             useDynamicColor = prefs[SettingsKeys.DYNAMIC_COLOR] ?: true,
             seedColor = prefs[SettingsKeys.SEED_COLOR] ?: 0xFF6750A4.toInt()
@@ -62,7 +71,10 @@ class SettingsRepository(private val context: Context) {
             prefs[SettingsKeys.FIRST_PILL_DATE] = settings.firstPillDate.toString()
             prefs[SettingsKeys.REMINDER_HOUR] = settings.reminderTime.hour
             prefs[SettingsKeys.REMINDER_MINUTE] = settings.reminderTime.minute
-            prefs[SettingsKeys.ACTIVE] = settings.active
+            prefs[SettingsKeys.BUYING_REMINDER] = settings.buyingReminder
+            prefs[SettingsKeys.BUYING_REMINDER_SCHEDULE] = settings.buyingReminderSchedule.name
+            prefs[SettingsKeys.BUYING_REMINDER_HOUR] = settings.buyingReminderTime.hour
+            prefs[SettingsKeys.BUYING_REMINDER_MINUTE] = settings.buyingReminderTime.minute
             prefs[SettingsKeys.THEME_MODE] = settings.themeMode.name
             prefs[SettingsKeys.DYNAMIC_COLOR] = settings.useDynamicColor
             prefs[SettingsKeys.SEED_COLOR] = settings.seedColor

@@ -42,10 +42,13 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private suspend fun saveToDisk(settings: SettingsState) {
         repository.saveSettings(settings)
-        if (settings.active) {
-            ReminderScheduler.schedule(getApplication(), settings.reminderTime)
+        ReminderScheduler.schedulePillReminder(getApplication(), settings.reminderTime)
+
+        if (settings.buyingReminder) {
+            ReminderScheduler.scheduleBuyingReminder(getApplication(), settings.buyingReminderTime)
         } else {
-            ReminderScheduler.cancel(getApplication())
+            ReminderScheduler.cancelBuyingAlarm(getApplication())
         }
+
     }
 }

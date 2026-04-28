@@ -18,7 +18,6 @@ class PillAlarmReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val settings = SettingsRepository(context).settingsFlow.first()
-                if (!settings.active) return@launch
 
                 val firstDate = settings.firstPillDate
                 val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1)
@@ -35,7 +34,7 @@ class PillAlarmReceiver : BroadcastReceiver() {
                 }
 
                 // Schedule tomorrow's alarm
-                ReminderScheduler.schedule(context, settings.reminderTime)
+                ReminderScheduler.schedulePillReminder(context, settings.reminderTime)
             } finally {
                 pendingResult.finish()
             }

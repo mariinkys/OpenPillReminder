@@ -43,13 +43,6 @@ fun HomeScreen(
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    if (!settings.active) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Tracking is not active", style = MaterialTheme.typography.headlineSmall)
-        }
-        return
-    }
-
     val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy")
     val firstDate = settings.firstPillDate
     val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1)
