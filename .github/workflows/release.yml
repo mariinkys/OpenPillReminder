@@ -28,9 +28,9 @@ jobs:
       - name: Sign and Align APK
         env:
           KEYSTORE_BASE64: ${{ secrets.SIGNING_KEY }}
-          KEYSTORE_PASSWORD: '${{ secrets.KEY_PASSWORD }}'
-          KEY_ALIAS: '${{ secrets.KEY_ALIAS }}'
-          KEY_PASSWORD: '${{ secrets.KEY_PASSWORD }}'
+          KEYSTORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           # Decode keystore
           echo "$KEYSTORE_BASE64" | base64 -d > release.jks
