@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class SettingsState(
+    val hasRequestedPermissions: Boolean = false,
     val userName: String = "",
     val activePills: Int = 21,
     val breakDays: Int = 7,

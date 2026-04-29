@@ -1,7 +1,14 @@
 package dev.mariinkys.openPillReminder.ui.settings
 
+import android.Manifest
+import android.app.AlarmManager
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import android.provider.Settings
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.model.ThemeMode
 import dev.mariinkys.openPillReminder.model.toDisplayString
@@ -57,6 +68,8 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        PermissionWarnings()
+
         // PROFILE
         SettingsSection(title = "Profile") {
             OutlinedTextField(
@@ -628,5 +641,107 @@ private fun AddColorDot(onClick: () -> Unit) {
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(20.dp)
         )
+    }
+}
+
+@Composable
+fun PermissionWarnings(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    var hasNotificationPermission by remember { mutableStateOf(true) }
+    var hasExactAlarmPermission by remember { mutableStateOf(true) }
+
+    // re-check permissions every time the user returns to this screen
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasNotificationPermission =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    } else {
+                        true
+                    }
+
+                hasExactAlarmPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val alarmManager =
+                        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    alarmManager.canScheduleExactAlarms()
+                } else {
+                    true
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        if (!hasNotificationPermission) {
+            WarningBanner(
+                text = "Notifications are disabled. The app won't be able to remind you.",
+                buttonText = "Enable",
+                onClick = {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    context.startActivity(intent)
+                }
+            )
+        }
+
+        if (!hasExactAlarmPermission) {
+            WarningBanner(
+                text = "Exact alarms are disabled. Reminders might not fire on time.",
+                buttonText = "Fix",
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                        context.startActivity(intent)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun WarningBanner(text: String, buttonText: String, onClick: () -> Unit) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
+            ) {
+                Text(buttonText)
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import java.time.LocalTime
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 object SettingsKeys {
+    val HAS_REQUESTED_PERMISSIONS = booleanPreferencesKey("has_requested_permissions")
     val USER_NAME = stringPreferencesKey("user_name")
     val ACTIVE_PILLS = intPreferencesKey("active_pills")
     val BREAK_DAYS = intPreferencesKey("break_days")
@@ -39,6 +40,7 @@ class SettingsRepository(private val context: Context) {
 
     val settingsFlow: Flow<SettingsState> = context.dataStore.data.map { prefs ->
         SettingsState(
+            hasRequestedPermissions = prefs[SettingsKeys.HAS_REQUESTED_PERMISSIONS] ?: false,
             userName = prefs[SettingsKeys.USER_NAME] ?: "",
             activePills = prefs[SettingsKeys.ACTIVE_PILLS] ?: 21,
             breakDays = prefs[SettingsKeys.BREAK_DAYS] ?: 7,
@@ -64,6 +66,7 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun saveSettings(settings: SettingsState) {
         context.dataStore.edit { prefs ->
+            prefs[SettingsKeys.HAS_REQUESTED_PERMISSIONS] = settings.hasRequestedPermissions
             prefs[SettingsKeys.USER_NAME] = settings.userName
             prefs[SettingsKeys.ACTIVE_PILLS] = settings.activePills
             prefs[SettingsKeys.BREAK_DAYS] = settings.breakDays
