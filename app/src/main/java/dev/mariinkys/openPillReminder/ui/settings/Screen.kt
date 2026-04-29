@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,12 +56,30 @@ import java.time.format.DateTimeFormatter
 fun SettingsScreen(
     settings: SettingsState,
     onSettingsChange: (SettingsState) -> Unit,
+    backupState: SettingsViewModel.BackupUiState,
+    onCreateBackup: (Uri) -> Unit,
+    onRestoreBackup: (Uri) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     var showColorPicker by remember { mutableStateOf(false) }
+    var showRestoreConfirmDialog by remember { mutableStateOf(false) }
+    var pendingRestoreUri by remember { mutableStateOf<Uri?>(null) }
+
+    val createBackupLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { uri -> uri?.let { onCreateBackup(it) } }
+
+    val restoreBackupLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            pendingRestoreUri = it
+            showRestoreConfirmDialog = true
+        }
+    }
 
     Column(
         modifier = modifier
@@ -254,13 +274,17 @@ fun SettingsScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { /* create backup */ }
+                        .clickable {
+                            val timestamp = java.time.LocalDateTime.now()
+                                .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"))
+                            createBackupLauncher.launch("openpillreminder_$timestamp.json")
+                        }
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text("Create Backup", style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        "Export your current data to a file",
+                        "Export all settings and pill history to a file",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -271,7 +295,7 @@ fun SettingsScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { /* restore backup */ }
+                        .clickable { restoreBackupLauncher.launch(arrayOf("application/json")) }
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -282,6 +306,10 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
+            }
+
+            if (backupState is SettingsViewModel.BackupUiState.Loading) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
         }
 
@@ -355,6 +383,40 @@ fun SettingsScreen(
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+    }
+
+    if (showRestoreConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                @Suppress("AssignedValueIsNeverRead")
+                showRestoreConfirmDialog = false
+                @Suppress("AssignedValueIsNeverRead")
+                pendingRestoreUri = null
+            },
+            title = { Text("Restore Backup?") },
+            text = { Text("This will replace all your current settings and pill history. This cannot be undone.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        pendingRestoreUri?.let { onRestoreBackup(it) }
+                        @Suppress("AssignedValueIsNeverRead")
+                        showRestoreConfirmDialog = false
+                        pendingRestoreUri = null
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) { Text("Restore") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    @Suppress("AssignedValueIsNeverRead")
+                    showRestoreConfirmDialog = false
+                    @Suppress("AssignedValueIsNeverRead")
+                    pendingRestoreUri = null
+                }) { Text("Cancel") }
+            }
+        )
     }
 
     if (showColorPicker) {

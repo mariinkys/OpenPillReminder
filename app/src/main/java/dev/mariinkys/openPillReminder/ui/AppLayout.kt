@@ -34,6 +34,8 @@ import dev.mariinkys.openPillReminder.ui.home.HomeViewModel
 import dev.mariinkys.openPillReminder.ui.settings.SettingsScreen
 import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
 import android.content.Context
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,6 +92,7 @@ fun AppLayout(
         }
     }
 
+    // if settings haven't loaded don't load the ui just yet
     if (!isLoaded) return
 
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -98,7 +101,25 @@ fun AppLayout(
         Pair("Settings", Icons.Default.Settings)
     )
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val backupState by settingsViewModel.backupState.collectAsState()
+
+    LaunchedEffect(backupState) {
+        when (val state = backupState) {
+            is SettingsViewModel.BackupUiState.Success -> {
+                snackbarHostState.showSnackbar(state.message)
+                settingsViewModel.clearBackupState()
+            }
+            is SettingsViewModel.BackupUiState.Error -> {
+                snackbarHostState.showSnackbar(state.message)
+                settingsViewModel.clearBackupState()
+            }
+            else -> {}
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -138,6 +159,9 @@ fun AppLayout(
             1 -> SettingsScreen(
                 settings = settings,
                 onSettingsChange = { settingsViewModel.updateSettings(it) },
+                backupState = backupState,
+                onCreateBackup = { uri -> settingsViewModel.createBackup(uri) },
+                onRestoreBackup = { uri -> settingsViewModel.restoreBackup(uri) },
                 modifier = Modifier.padding(innerPadding),
             )
         }
