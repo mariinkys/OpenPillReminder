@@ -13,13 +13,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '25'
           cache: 'gradle'
 
       - name: Build Release APK
@@ -57,7 +57,7 @@ jobs:
           echo "SHA-256 Hash of APK: $sha256"
 
       - name: Upload APK to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: OpenPillReminder-${{ github.event.release.tag_name }}.apk
           append_body: true

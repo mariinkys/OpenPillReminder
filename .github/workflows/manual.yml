@@ -10,13 +10,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '25'
           cache: 'gradle'
 
       - name: Build Release APK
@@ -43,7 +43,7 @@ jobs:
           echo "apk_name=$NAME" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: OpenPillReminder-Production-Build
           path: ${{ steps.process_apk.outputs.apk_name }}
