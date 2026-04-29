@@ -23,32 +23,38 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Sign and Align APK
-        id: sign_app
+        id: process_apk
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          # 1. Find the latest build tools 
+          # 1. Find build tools
           BUILD_TOOLS_PATH=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
-          echo "Using Build Tools from: $BUILD_TOOLS_PATH"
           
-          # 2. Decode the keystore from secrets
-          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > release.jks
+          # 2. Decode keystore from the env variable
+          echo "$SIGNING_KEY" | base64 -d > release.jks
           
-          # 3. Align the APK 
-          $BUILD_TOOLS_PATH/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk OpenPillReminder-latest-aligned.apk
+          # 3. Align the APK
+          $BUILD_TOOLS_PATH/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
           
-          # 4. Sign the aligned APK
+          # 4. Sign the APK using env variables
           $BUILD_TOOLS_PATH/apksigner sign --ks release.jks \
-            --ks-key-alias "${{ secrets.ALIAS }}" \
-            --ks-pass pass:"${{ secrets.KEY_PASSWORD }}" \
-            --key-pass pass:"${{ secrets.KEY_PASSWORD }}" \
+            --ks-key-alias "$ALIAS" \
+            --ks-pass pass:"$KEY_PASSWORD" \
+            --key-pass pass:"$KEY_PASSWORD" \
             --out OpenPillReminder-latest.apk \
-            OpenPillReminder-latest-aligned.apk
+            aligned.apk
           
-          # 5. Clean up the sensitive JKS file
-          rm release.jks
-          
-          # 6. Generate hash for verification
+          # 5. Generate Hash for logs
           sha256=$(sha256sum OpenPillReminder-latest.apk | awk '{ print $1 }')
-          echo "apk_sha=$sha256" >> $GITHUB_OUTPUT
+          echo "SHA-256 Hash: $sha256"
+          
+          # 6. Cleanup
+          rm release.jks aligned.apk
+          
+          # 7. Set output for the next step
+          echo "apk_name=OpenPillReminder-latest.apk" >> $GITHUB_OUTPUT
 
       - name: Rename and Hash APK
         id: process_apk
