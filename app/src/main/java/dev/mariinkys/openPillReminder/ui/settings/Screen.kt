@@ -248,6 +248,43 @@ fun SettingsScreen(
             }
         }
 
+        // BACKUP
+        SettingsSection(title = "Backup") {
+            OutlinedCard(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { /* create backup */ }
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text("Create Backup", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        "Export your current data to a file",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            OutlinedCard(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { /* restore backup */ }
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text("Restore Backup", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        "This will overwrite your current data",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
+
         // ABOUT
         val uriHandler = LocalUriHandler.current
         SettingsSection(title = "About") {
@@ -317,11 +354,9 @@ fun SettingsScreen(
             }
         }
 
-        // Add some bottom padding to ensure the last section isn't cut off
         Spacer(modifier = Modifier.height(32.dp))
     }
 
-    // Color Picker Dialog
     if (showColorPicker) {
         ColorPickerDialog(
             initialColor = Color(settings.seedColor),
@@ -337,8 +372,6 @@ fun SettingsScreen(
         )
     }
 
-
-    // Date Picker Dialog
     if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = {
@@ -490,7 +523,7 @@ private fun ColorPickerDialog(
                     )
                 }
 
-                // Preview + hex label
+                // preview + hex label
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -560,9 +593,9 @@ private fun SaturationValueBox(
                     }
                 }
         ) {
-            // White-to-hue horizontal gradient
+            // white-to-hue horizontal gradient
             drawRect(brush = Brush.horizontalGradient(listOf(Color.White, hueColor)))
-            // Transparent-to-black vertical gradient (darkness)
+            // transparent-to-black vertical gradient (darkness)
             drawRect(brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black)))
 
             // Thumb
