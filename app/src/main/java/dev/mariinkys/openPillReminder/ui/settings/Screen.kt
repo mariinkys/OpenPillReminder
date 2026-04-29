@@ -90,7 +90,8 @@ fun SettingsScreen(
             SettingsSwitchRow(
                 label = "Placebo Pills on Break Days",
                 checked = settings.placebo,
-                onCheckedChange = { onSettingsChange(settings.copy(placebo = it)) }
+                onCheckedChange = { onSettingsChange(settings.copy(placebo = it)) },
+                description = "Reminds you to take non-active pills so you don't lose the habit.",
             )
 
             Row(
@@ -368,14 +369,31 @@ private fun SettingsSection(title: String, content: @Composable ColumnScope.() -
 }
 
 @Composable
-private fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+private fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, description: String? = null) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(48.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            if (description != null) {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
     }
 }
 
