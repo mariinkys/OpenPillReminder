@@ -44,54 +44,55 @@ fun AppLayout(
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
 
-    // Launcher for standard Notification permission
-    val notificationPermissionLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission()
-        ) {}
+    val settings by settingsViewModel.uiState.collectAsState()
+    val isLoaded by settingsViewModel.isLoaded.collectAsState()
+    val showPermissions by settingsViewModel.showPermissionRequest.collectAsState(initial = false)
 
-    // Launcher for the Settings Intent (Special App Access)
-    val exactAlarmPermissionLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ) {
-            // TODO: Check if they actually granted it when they return...
-            // val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            // val isGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) alarmManager.canScheduleExactAlarms() else true
-        }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) {}
 
-    LaunchedEffect(Unit) {
-        // Request POST_NOTIFICATIONS (Android 13+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val granted = ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
+    val exactAlarmPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {}
 
-            if (!granted) {
-                notificationPermissionLauncher.launch(
+    LaunchedEffect(showPermissions) {
+        if (showPermissions) {
+            settingsViewModel.markPermissionsRequested()
+
+            // Request POST_NOTIFICATIONS (Android 13+)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val granted = ContextCompat.checkSelfPermission(
+                    context,
                     android.Manifest.permission.POST_NOTIFICATIONS
-                )
-            }
-        }
+                ) == PackageManager.PERMISSION_GRANTED
 
-        // Request SCHEDULE_EXACT_ALARM (Android 12+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
-            if (!alarmManager.canScheduleExactAlarms()) {
-                val intent = android.content.Intent(
-                    android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                ).apply {
-                    data = android.net.Uri.fromParts("package", context.packageName, null)
+                if (!granted) {
+                    notificationPermissionLauncher.launch(
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    )
                 }
-                exactAlarmPermissionLauncher.launch(intent)
+            }
+
+            // Request SCHEDULE_EXACT_ALARM (Android 12+)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val alarmManager =
+                    context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
+                if (!alarmManager.canScheduleExactAlarms()) {
+                    val intent = android.content.Intent(
+                        android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                    ).apply {
+                        data = android.net.Uri.fromParts("package", context.packageName, null)
+                    }
+                    exactAlarmPermissionLauncher.launch(intent)
+                }
             }
         }
     }
 
-    var selectedTab by remember { mutableIntStateOf(0) }
-    val settings by settingsViewModel.uiState.collectAsState()
+    if (!isLoaded) return
 
+    var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf(
         Pair("Home", Icons.Default.Home),
         Pair("Settings", Icons.Default.Settings)
