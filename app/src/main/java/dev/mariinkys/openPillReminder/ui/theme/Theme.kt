@@ -26,6 +26,7 @@ fun OpenPillReminderTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         else -> generateColorSchemeFromSeed(settings.seedColor, darkTheme)
     }
 
@@ -40,7 +41,9 @@ fun OpenPillReminderTheme(
  * Converts a Color to HSL floats: [hue 0–360, saturation 0–1, lightness 0–1]
  */
 private fun Color.toHsl(): FloatArray {
-    val r = red; val g = green; val b = blue
+    val r = red
+    val g = green
+    val b = blue
     val max = maxOf(r, g, b)
     val min = minOf(r, g, b)
     val delta = max - min
@@ -52,7 +55,7 @@ private fun Color.toHsl(): FloatArray {
         delta == 0f -> 0f
         max == r -> (((g - b) / delta) % 6f + 6f) % 6f * 60f
         max == g -> ((b - r) / delta + 2f) * 60f
-        else      -> ((r - g) / delta + 4f) * 60f
+        else -> ((r - g) / delta + 4f) * 60f
     }
 
     return floatArrayOf(h, s, l)
@@ -61,7 +64,12 @@ private fun Color.toHsl(): FloatArray {
 /**
  * Builds a Color from HSL. Hue is automatically wrapped to [0, 360).
  */
-private fun colorFromHsl(hue: Float, saturation: Float, lightness: Float, alpha: Float = 1f): Color {
+private fun colorFromHsl(
+    hue: Float,
+    saturation: Float,
+    lightness: Float,
+    alpha: Float = 1f
+): Color {
     val h = ((hue % 360f) + 360f) % 360f
     val s = saturation.coerceIn(0f, 1f)
     val l = lightness.coerceIn(0f, 1f)
@@ -71,12 +79,12 @@ private fun colorFromHsl(hue: Float, saturation: Float, lightness: Float, alpha:
     val m = l - c / 2f
 
     val (r, g, b) = when {
-        h < 60f  -> Triple(c, x, 0f)
+        h < 60f -> Triple(c, x, 0f)
         h < 120f -> Triple(x, c, 0f)
         h < 180f -> Triple(0f, c, x)
         h < 240f -> Triple(0f, x, c)
         h < 300f -> Triple(x, 0f, c)
-        else     -> Triple(c, 0f, x)
+        else -> Triple(c, 0f, x)
     }
 
     return Color(r + m, g + m, b + m, alpha)
@@ -89,51 +97,51 @@ private fun generateColorSchemeFromSeed(seedColor: Int, isDark: Boolean): ColorS
     val s = sat.coerceIn(0.35f, 0.75f)
 
     val secondaryHue = hue + 30f
-    val tertiaryHue  = hue + 150f
+    val tertiaryHue = hue + 150f
 
     return if (isDark) {
         darkColorScheme(
-            primary              = colorFromHsl(hue,         s,    0.78f),
-            onPrimary            = colorFromHsl(hue,         s,    0.15f),
-            primaryContainer     = colorFromHsl(hue,         s,    0.25f),
-            onPrimaryContainer   = colorFromHsl(hue,         s,    0.90f),
+            primary = colorFromHsl(hue, s, 0.78f),
+            onPrimary = colorFromHsl(hue, s, 0.15f),
+            primaryContainer = colorFromHsl(hue, s, 0.25f),
+            onPrimaryContainer = colorFromHsl(hue, s, 0.90f),
 
-            secondary            = colorFromHsl(secondaryHue, s,   0.75f),
-            onSecondary          = colorFromHsl(secondaryHue, s,   0.15f),
-            secondaryContainer   = colorFromHsl(secondaryHue, s,   0.22f),
-            onSecondaryContainer = colorFromHsl(secondaryHue, s,   0.90f),
+            secondary = colorFromHsl(secondaryHue, s, 0.75f),
+            onSecondary = colorFromHsl(secondaryHue, s, 0.15f),
+            secondaryContainer = colorFromHsl(secondaryHue, s, 0.22f),
+            onSecondaryContainer = colorFromHsl(secondaryHue, s, 0.90f),
 
-            tertiary             = colorFromHsl(tertiaryHue,  s,   0.80f),
-            onTertiary           = colorFromHsl(tertiaryHue,  s,   0.15f),
-            tertiaryContainer    = colorFromHsl(tertiaryHue,  s,   0.25f),
-            onTertiaryContainer  = colorFromHsl(tertiaryHue,  s,   0.92f),
+            tertiary = colorFromHsl(tertiaryHue, s, 0.80f),
+            onTertiary = colorFromHsl(tertiaryHue, s, 0.15f),
+            tertiaryContainer = colorFromHsl(tertiaryHue, s, 0.25f),
+            onTertiaryContainer = colorFromHsl(tertiaryHue, s, 0.92f),
 
-            surface              = Color(0xFF121212),
-            onSurface            = Color(0xFFE6E1E5),
-            background           = Color(0xFF121212),
-            surfaceVariant       = Color(0xFF1E1E1E),
+            surface = Color(0xFF121212),
+            onSurface = Color(0xFFE6E1E5),
+            background = Color(0xFF121212),
+            surfaceVariant = Color(0xFF1E1E1E),
         )
     } else {
         lightColorScheme(
-            primary              = colorFromHsl(hue,         s,    0.38f),
-            onPrimary            = Color.White,
-            primaryContainer     = colorFromHsl(hue,         s,    0.92f),
-            onPrimaryContainer   = colorFromHsl(hue,         s,    0.15f),
+            primary = colorFromHsl(hue, s, 0.38f),
+            onPrimary = Color.White,
+            primaryContainer = colorFromHsl(hue, s, 0.92f),
+            onPrimaryContainer = colorFromHsl(hue, s, 0.15f),
 
-            secondary            = colorFromHsl(secondaryHue, s,   0.40f),
-            onSecondary          = Color.White,
-            secondaryContainer   = colorFromHsl(secondaryHue, s,   0.90f),
-            onSecondaryContainer = colorFromHsl(secondaryHue, s,   0.15f),
+            secondary = colorFromHsl(secondaryHue, s, 0.40f),
+            onSecondary = Color.White,
+            secondaryContainer = colorFromHsl(secondaryHue, s, 0.90f),
+            onSecondaryContainer = colorFromHsl(secondaryHue, s, 0.15f),
 
-            tertiary             = colorFromHsl(tertiaryHue,  s,   0.38f),
-            onTertiary           = Color.White,
-            tertiaryContainer    = colorFromHsl(tertiaryHue,  s,   0.91f),
-            onTertiaryContainer  = colorFromHsl(tertiaryHue,  s,   0.13f),
+            tertiary = colorFromHsl(tertiaryHue, s, 0.38f),
+            onTertiary = Color.White,
+            tertiaryContainer = colorFromHsl(tertiaryHue, s, 0.91f),
+            onTertiaryContainer = colorFromHsl(tertiaryHue, s, 0.13f),
 
-            surface              = Color.White,
-            onSurface            = Color(0xFF1C1B1F),
-            background           = Color.White,
-            surfaceVariant       = Color(0xFFF5F0FF),
+            surface = Color.White,
+            onSurface = Color(0xFF1C1B1F),
+            background = Color.White,
+            surfaceVariant = Color(0xFFF5F0FF),
         )
     }
 }
