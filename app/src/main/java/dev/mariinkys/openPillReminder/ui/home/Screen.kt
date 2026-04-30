@@ -176,14 +176,14 @@ fun PillBubble(
     val colors = MaterialTheme.colorScheme
     val targetColor = when {
         isTaken -> colors.primary
-        isBreakDay -> colors.secondaryContainer
-        else -> colors.tertiaryContainer
+        isBreakDay -> colors.tertiaryContainer
+        else -> colors.secondaryContainer
     }
 
     val contentColor = when {
         isTaken -> colors.onPrimary
-        isBreakDay -> colors.onSecondaryContainer
-        else -> colors.onTertiaryContainer
+        isBreakDay -> colors.onTertiaryContainer
+        else -> colors.onSecondaryContainer
     }
 
     val animatedColor by animateColorAsState(targetValue = targetColor, label = "color")
