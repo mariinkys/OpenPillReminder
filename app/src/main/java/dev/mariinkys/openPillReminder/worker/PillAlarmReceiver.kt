@@ -3,6 +3,7 @@ package dev.mariinkys.openPillReminder.worker
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dev.mariinkys.openPillReminder.data.PillLogRepository
 import dev.mariinkys.openPillReminder.data.SettingsRepository
 import dev.mariinkys.openPillReminder.sendPillNotification
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,10 @@ class PillAlarmReceiver : BroadcastReceiver() {
                     val positionInCycle = (daysSinceStart % cycleLength).toInt()
                     val isBreakDay = positionInCycle >= settings.activePills
 
-                    if (!isBreakDay || settings.placebo) {
+                    val todayLog = PillLogRepository(context).pillLogsFlow.first()[today]
+                    val alreadyTaken = todayLog?.taken == true
+
+                    if (!alreadyTaken && (!isBreakDay || settings.placebo)) {
                         sendPillNotification(context, settings.userName, isBreakDay, today)
                     }
                 }
