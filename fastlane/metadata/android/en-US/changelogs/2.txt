@@ -1,0 +1,5 @@
+- fix: issue that made the app always open the pill dialog if the app was once opened via the pill notification (#14)
+- improv: color generation (#16)
+- improv: do not send pill notification if it has already been marked as taken today (#17)
+- improv: add app version to settings screen
+- chore: updated screenshots
