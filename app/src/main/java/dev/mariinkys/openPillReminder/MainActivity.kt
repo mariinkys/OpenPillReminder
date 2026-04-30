@@ -7,38 +7,47 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.mariinkys.openPillReminder.ui.AppLayout
 import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
 import dev.mariinkys.openPillReminder.ui.theme.OpenPillReminderTheme
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    // Hold the date from the notification
-    private var notificationDate by mutableStateOf<String?>(null)
+
+    private val notificationChannel = Channel<String>(Channel.BUFFERED)
+    val notificationEvents = notificationChannel.receiveAsFlow()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createNotificationChannel(this)
         enableEdgeToEdge()
 
-        // Get the date from the intent if it exists
-        val initialDate = intent.getStringExtra("OPEN_LOG_DATE")
+        handleIntent(intent)
 
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel()
             val settings by settingsViewModel.uiState.collectAsState()
 
             OpenPillReminderTheme(settings = settings) {
-                AppLayout(notificationDate = initialDate, settingsViewModel = settingsViewModel)
+                AppLayout(notificationEvents = notificationEvents, settingsViewModel = settingsViewModel)
             }
         }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        // Check intent when app is already running in background
-        notificationDate = intent.getStringExtra("OPEN_LOG_DATE")
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        intent.getStringExtra("OPEN_LOG_DATE")?.let { date ->
+            lifecycleScope.launch {
+                notificationChannel.send(date)
+            }
+        }
     }
 }

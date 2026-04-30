@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.mariinkys.openPillReminder.model.PillLog
 import dev.mariinkys.openPillReminder.model.SettingsState
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -37,7 +38,7 @@ fun HomeScreen(
     settings: SettingsState,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
-    notificationDate: String? = null,
+    notificationEvents: Flow<String>,
 ) {
     val pillLogs by viewModel.pillLogs.collectAsState()
     val configuration = LocalConfiguration.current
@@ -58,8 +59,10 @@ fun HomeScreen(
     val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { totalPages })
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
-    LaunchedEffect(notificationDate) {
-        notificationDate?.let { selectedDate = LocalDate.parse(it) }
+    LaunchedEffect(Unit) {
+        notificationEvents.collect { dateString ->
+            selectedDate = LocalDate.parse(dateString)
+        }
     }
 
     // determine grid layout based on orientation
@@ -233,8 +236,8 @@ fun PillLogDialog(
     onDismiss: () -> Unit,
     onSave: (PillLog) -> Unit
 ) {
-    var taken by remember { mutableStateOf(log.taken) }
-    var note by remember { mutableStateOf(log.note) }
+    var taken by remember(log.taken) { mutableStateOf(log.taken) }
+    var note by remember(log.note) { mutableStateOf(log.note) }
     val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d")
 
     AlertDialog(

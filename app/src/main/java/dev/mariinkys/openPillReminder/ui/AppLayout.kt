@@ -36,13 +36,14 @@ import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
 import android.content.Context
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppLayout(
     settingsViewModel: SettingsViewModel = viewModel(),
     homeViewModel: HomeViewModel = viewModel(),
-    notificationDate: String? = null,
+    notificationEvents: Flow<String>,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
 
@@ -154,7 +155,7 @@ fun AppLayout(
                 settings = settings,
                 modifier = Modifier.padding(innerPadding),
                 viewModel = homeViewModel,
-                notificationDate = notificationDate,
+                notificationEvents = notificationEvents,
             )
             1 -> SettingsScreen(
                 settings = settings,
