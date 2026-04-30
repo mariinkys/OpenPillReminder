@@ -1,8 +1,15 @@
 name: Android Release
-
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name (e.g: 1.0.0)'
+        required: true
+        type: string
+      release_name:
+        description: 'Release name (e.g: Release 1.0.0)'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -10,7 +17,6 @@ jobs:
     environment: Release
     permissions:
       contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -45,25 +51,29 @@ jobs:
             --ks-key-alias "$ALIAS" \
             --ks-pass pass:"$KEY_PASSWORD" \
             --key-pass pass:"$KEY_PASSWORD" \
-            --out OpenPillReminder-${{ github.event.release.tag_name }}.apk \
+            --out OpenPillReminder-${{ github.event.inputs.tag_name }}.apk \
             aligned.apk
           
-          # 6. Cleanup
+          # 5. Cleanup
           rm release.jks aligned.apk
 
       - name: Generate APK Hash
         id: generate_hash
         run: |
-          sha256=$(sha256sum OpenPillReminder-${{ github.event.release.tag_name }}.apk | awk '{ print $1 }')
+          sha256=$(sha256sum OpenPillReminder-${{ github.event.inputs.tag_name }}.apk | awk '{ print $1 }')
           echo "apk_sha=$sha256" >> $GITHUB_OUTPUT
           echo "SHA-256 Hash of APK: $sha256"
 
-      - name: Upload APK to Release
+      - name: Create Draft Release with APK
         uses: softprops/action-gh-release@v3
         with:
-          files: OpenPillReminder-${{ github.event.release.tag_name }}.apk
-          append_body: true
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_name }}
+          draft: true
+          files: OpenPillReminder-${{ github.event.inputs.tag_name }}.apk
           body: |
+            <!-- Write changelog here -->
+
             ---
             ### Security Verification
             **APK SHA-256 Hash:** `${{ steps.generate_hash.outputs.apk_sha }}`

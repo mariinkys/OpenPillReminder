@@ -1,4 +1,4 @@
-name: Android Manual Build
+name: Android Testing Build
 
 on:
   workflow_dispatch:
