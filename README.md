@@ -19,10 +19,13 @@
 
 <div align="center">
   <a href="https://github.com/mariinkys/OpenPillReminder/releases/latest">
-    <img src="resources/badges/badge_github.png" alt="Get it on GitHub" width="320" />
+    <img src="resources/badges/badge_github.png" alt="Get it on GitHub" height="120" />
   </a>
   <a href="https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/mariinkys/OpenPillReminder">
-    <img src="resources/badges/badge_obtainium.png" alt="Get it on Obtainium" width="320" />
+    <img src="resources/badges/badge_obtainium.png" alt="Get it on Obtainium" height="120" />
+  </a>
+  <a href="https://apt.izzysoft.de/packages/dev.mariinkys.OpenPillReminder">
+    <img src="resources/badges/badge_izzy.png" alt="Get it at IzzyOnDroid" height="122" />
   </a>
 </div>
 
