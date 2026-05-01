@@ -1,0 +1,89 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">OpenPillReminder</string>
+
+    <string name="home">Inici</string>
+    <string name="settings">Configuració</string>
+    <string name="welcome">Benvingud@</string>
+    <string name="welcome_user">Benvingud@, %1$s</string>
+
+    <!-- NOTIFICATIONS -->
+    <string name="channel_name">Recordatoris de pastilles</string>
+    <string name="channel_description">Notificacions diàries per prendre la pastilla</string>
+    <string name="notif_pill_title">Recordatori de pastilla</string>
+    <string name="notif_placebo_title">Recordatori de placebo</string>
+    <string name="notif_pill_msg">És l\'hora de prendre la teva pastilla%1$s!</string>
+    <string name="notif_placebo_msg">És l\'hora de prendre el teu placebo%1$s!</string>
+    <string name="notif_buy_title">Recordatori de compra</string>
+    <string name="notif_buy_msg">És l\'hora de comprar el següent paquet%1$s!</string>
+
+    <!-- HOME SCREEN -->
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="pill_taken">Pastilla presa</string>
+    <string name="placebo_taken">Placebo pres</string>
+    <string name="notes">Notes</string>
+    <string name="save">Desar</string>
+    <string name="cancel">Cancel·lar</string>
+
+    <!-- SETTINGS SCREEN -->
+
+    <!-- Sections -->
+    <string name="section_profile">Perfil</string>
+    <string name="section_pill_schedule">Horari de les pastilles</string>
+    <string name="section_buying_reminder">Recordatori de compra</string>
+    <string name="section_appearance">Aparença</string>
+    <string name="section_backup">Còpia de seguretat</string>
+    <string name="section_about">Sobre l\'App</string>
+
+    <!-- Labels and Fields -->
+    <string name="your_name">El teu nom</string>
+    <string name="active_pills">Pastilles actives</string>
+    <string name="break_days">Dies de descans</string>
+    <string name="placebo_label">Placebos als dies de descans</string>
+    <string name="placebo_desc">Et recorda prendre les pastilles no actives per no perdre l\'hàbit.</string>
+    <string name="first_pill_date">Data de la primera pastilla</string>
+    <string name="reminder_time">Hora del recordatori</string>
+    <string name="buying_reminder">Activar el recordatori de compra</string>
+    <string name="reminder_day">Dia del recordatori</string>
+    <string name="theme_mode">Mode del tema</string>
+    <string name="material_you">Color dinàmic (Material You)</string>
+    <string name="accent_color">Color d\'accent</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Clar</string>
+    <string name="theme_dark">Fosc</string>
+    <string name="first_pill_day">El dia de la primera pastilla</string>
+    <string name="day_before">1 dia abans</string>
+    <string name="two_days_before">2 dies abans</string>
+    <string name="three_days_before">3 dies abans</string>
+    <string name="four_days_before">4 dies abans</string>
+    <string name="five_days_before">5 dies abans</string>
+    <string name="six_days_before">6 dies abans</string>
+    <string name="seven_days_before">7 dies abans</string>
+
+    <!-- Backup -->
+    <string name="create_backup">Crear còpia de seguretat</string>
+    <string name="create_backup_desc">Exportar tots els ajustos i l\'historial a un fitxer</string>
+    <string name="restore_backup">Restaurar còpia de seguretat</string>
+    <string name="restore_backup_desc">Això sobreescriurà les dades actuals</string>
+
+    <!-- Dialogs -->
+    <string name="restore_confirm_title">Restaurar còpia de seguretat?</string>
+    <string name="restore_confirm_text">Se substituiran tots els ajustos i l\'historial. Aquesta acció no es pot desfer.</string>
+    <string name="restore">Restaurar</string>
+    <string name="select">Seleccionar</string>
+    <string name="pick_color">Triar un color</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">D\'acord</string>
+    <string name="custom_color">Color personalitzat</string>
+
+    <!-- About -->
+    <string name="author">Autor</string>
+    <string name="repository">Veure el repositori</string>
+    <string name="issues">Informar d\'un error o suggeriment</string>
+    <string name="license">Informació de llicència (GPL-3.0)</string>
+    <string name="support">Donar suport al projecte ❤️</string>
+
+    <!-- Permissions Banners -->
+    <string name="notifications_disabled">Les notificacions estan desactivades. L\'aplicació no podrà enviar-te recordatoris.</string>
+    <string name="exact_alarms_disabled">Les alarmes exactes estan desactivades. És possible que els recordatoris no arribin puntualment.</string>
+    <string name="enable">Activar</string>
+    <string name="fix">Solucionar</string>
+</resources>

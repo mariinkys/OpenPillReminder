@@ -1,0 +1,14 @@
+OpenPillReminder és una forma senzilla i fiable de mantenir la teva rutina anticonceptiva. La configuració només triga un moment: selecciona el tipus de paquet que utilitzes (nombre de pastilles) i tria l'hora en què te la prens habitualment. A partir d'aquí, Open Pill Reminder t'enviarà notificacions discretes perquè mai no n'oblidis cap dosi. També pots consultar fàcilment l'estat del teu paquet actual en qualsevol moment.
+
+OpenPillReminder t'ajuda a gestionar la teva rutina fàcilment: de manera senzilla, eficaç i gratuïta (i sense anuncis).
+
+Característiques:
+
+- Recordatoris diaris perquè no oblidis la teva pastilla
+- Pausa automàtica dels recordatoris els dies en què no cal prendre la pastilla
+- Notificacions en lloc d'alarmes intrusives
+- Alertes quan arriba el moment de començar un nou paquet o comprar-ne més
+- Mides de paquet personalitzables per a tots els tipus de pastilles anticonceptives
+- Visualització clara de l'estat del teu paquet actual
+
+Nota: Determinades configuracions del dispositiu o aplicacions de tercers poden interferir amb les notificacions. OpenPillReminder s'ha d'utilitzar com una eina de suport i no com l'únic sistema de recordatori. No ens fem responsables de les pastilles oblidades a causa de problemes amb les notificacions.

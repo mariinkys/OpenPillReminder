@@ -1,7 +1,10 @@
 package dev.mariinkys.openPillReminder.model
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import java.time.LocalDate
 import java.time.LocalTime
+import dev.mariinkys.openPillReminder.R
 
 data class SettingsState(
     val hasRequestedPermissions: Boolean = false,
@@ -23,17 +26,27 @@ enum class ThemeMode {
     SYSTEM, LIGHT, DARK
 }
 
+@Composable
+fun ThemeMode.toLocalizedDisplayString(): String {
+    return when (this) {
+        ThemeMode.SYSTEM -> stringResource(R.string.theme_system)
+        ThemeMode.LIGHT -> stringResource(R.string.theme_light)
+        ThemeMode.DARK -> stringResource(R.string.theme_dark)
+    }
+}
+
 enum class BuyingReminderSchedule {
     FirstPillDate, DayBefore, TwoDaysBefore, ThreeDaysBefore, FourDaysBefore, FiveDaysBefore, SixDaysBefore, SevenDaysBefore
 }
 
+@Composable
 fun BuyingReminderSchedule.toDisplayString(): String = when (this) {
-    BuyingReminderSchedule.FirstPillDate -> "On the first pill day"
-    BuyingReminderSchedule.DayBefore -> "1 day before"
-    BuyingReminderSchedule.TwoDaysBefore -> "2 days before"
-    BuyingReminderSchedule.ThreeDaysBefore -> "3 days before"
-    BuyingReminderSchedule.FourDaysBefore -> "4 days before"
-    BuyingReminderSchedule.FiveDaysBefore -> "5 days before"
-    BuyingReminderSchedule.SixDaysBefore -> "6 days before"
-    BuyingReminderSchedule.SevenDaysBefore -> "7 days before"
+    BuyingReminderSchedule.FirstPillDate -> stringResource(R.string.first_pill_day)
+    BuyingReminderSchedule.DayBefore -> stringResource(R.string.day_before)
+    BuyingReminderSchedule.TwoDaysBefore -> stringResource(R.string.two_days_before)
+    BuyingReminderSchedule.ThreeDaysBefore -> stringResource(R.string.three_days_before)
+    BuyingReminderSchedule.FourDaysBefore -> stringResource(R.string.four_days_before)
+    BuyingReminderSchedule.FiveDaysBefore -> stringResource(R.string.five_days_before)
+    BuyingReminderSchedule.SixDaysBefore -> stringResource(R.string.six_days_before)
+    BuyingReminderSchedule.SevenDaysBefore -> stringResource(R.string.seven_days_before)
 }

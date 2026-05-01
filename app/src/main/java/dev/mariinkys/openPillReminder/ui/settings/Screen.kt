@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.content.ContextCompat
@@ -47,6 +48,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.mariinkys.openPillReminder.model.SettingsState
 import dev.mariinkys.openPillReminder.model.ThemeMode
 import dev.mariinkys.openPillReminder.model.toDisplayString
+import dev.mariinkys.openPillReminder.R
+import dev.mariinkys.openPillReminder.model.toLocalizedDisplayString
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
@@ -63,6 +66,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val locale = androidx.compose.ui.text.intl.Locale.current.platformLocale
+
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     var showColorPicker by remember { mutableStateOf(false) }
@@ -92,40 +97,40 @@ fun SettingsScreen(
         PermissionWarnings()
 
         // PROFILE
-        SettingsSection(title = "Profile") {
+        SettingsSection(title = stringResource(R.string.section_profile)) {
             OutlinedTextField(
                 value = settings.userName,
                 onValueChange = { onSettingsChange(settings.copy(userName = it)) },
-                label = { Text("Your name") },
+                label = { Text(stringResource(R.string.your_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
         }
 
         // PILL SCHEDULE
-        SettingsSection(title = "Pill Schedule") {
+        SettingsSection(title = stringResource(R.string.section_pill_schedule)) {
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 OutlinedTextField(
                     value = settings.activePills.toString(),
                     onValueChange = { onSettingsChange(settings.copy(activePills = it.toIntOrNull() ?: 0)) },
-                    label = { Text("Active Pills") },
+                    label = { Text(stringResource(R.string.active_pills)) },
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
                     value = settings.breakDays.toString(),
                     onValueChange = { onSettingsChange(settings.copy(breakDays = it.toIntOrNull() ?: 0)) },
-                    label = { Text("Break Days") },
+                    label = { Text(stringResource(R.string.break_days)) },
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
 
             SettingsSwitchRow(
-                label = "Placebo Pills on Break Days",
+                label = stringResource(R.string.placebo_label),
                 checked = settings.placebo,
                 onCheckedChange = { onSettingsChange(settings.copy(placebo = it)) },
-                description = "Reminds you to take non-active pills so you don't lose the habit.",
+                description = stringResource(R.string.placebo_desc),
             )
 
             Row(
@@ -133,9 +138,9 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("First Pill Date", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.first_pill_date), style = MaterialTheme.typography.bodyLarge)
                 TextButton(onClick = { showDatePicker = true }) {
-                    Text(settings.firstPillDate.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")))
+                    Text(settings.firstPillDate.format(DateTimeFormatter.ofPattern("MMM dd, yyyy", locale)))
                 }
             }
 
@@ -145,7 +150,7 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.reminder_time), style = MaterialTheme.typography.bodyLarge)
                 TextButton(onClick = {
                     TimePickerDialog(
                         context,
@@ -157,15 +162,15 @@ fun SettingsScreen(
                         true
                     ).show()
                 }) {
-                    Text(settings.reminderTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+                    Text(settings.reminderTime.format(DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT).withLocale(locale)))
                 }
             }
         }
 
         // PILL BUYING REMINDER
-        SettingsSection(title = "Pill Buying Reminder") {
+        SettingsSection(title = stringResource(R.string.section_buying_reminder)) {
             SettingsSwitchRow(
-                label = "Enable Buying Reminder",
+                label = stringResource(R.string.buying_reminder),
                 checked = settings.buyingReminder,
                 onCheckedChange = { onSettingsChange(settings.copy(buyingReminder = it)) }
             )
@@ -178,7 +183,7 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Reminder Day", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.reminder_day), style = MaterialTheme.typography.bodyLarge)
                     Box {
                         TextButton(onClick = { showBuyingScheduleMenu = true }) {
                             Text(settings.buyingReminderSchedule.toDisplayString())
@@ -206,7 +211,7 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Reminder Time", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.reminder_time), style = MaterialTheme.typography.bodyLarge)
                     TextButton(onClick = {
                         TimePickerDialog(
                             context,
@@ -226,9 +231,9 @@ fun SettingsScreen(
 
 
         // APPEARANCE
-        SettingsSection(title = "Appearance") {
+        SettingsSection(title = stringResource(R.string.section_appearance)) {
             // Theme Selection
-            Text("Theme Mode", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.theme_mode), style = MaterialTheme.typography.bodyMedium)
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 ThemeMode.entries.forEachIndexed { index, mode ->
                     SegmentedButton(
@@ -236,21 +241,21 @@ fun SettingsScreen(
                         onClick = { onSettingsChange(settings.copy(themeMode = mode)) },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = ThemeMode.entries.size)
                     ) {
-                        Text(mode.name.lowercase().replaceFirstChar { it.uppercase() })
+                        Text(mode.toLocalizedDisplayString())
                     }
                 }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 SettingsSwitchRow(
-                    label = "Dynamic Color (Material You)",
+                    label = stringResource(R.string.material_you),
                     checked = settings.useDynamicColor,
                     onCheckedChange = { onSettingsChange(settings.copy(useDynamicColor = it)) }
                 )
             }
 
             if (!settings.useDynamicColor || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                Text("Accent Color", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.accent_color), style = MaterialTheme.typography.bodyMedium)
                 val colorOptions = listOf(0xFF6750A4, 0xFF006A60, 0xFF984061, 0xFF3D662F, 0xFF005FAF)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -270,7 +275,7 @@ fun SettingsScreen(
         }
 
         // BACKUP
-        SettingsSection(title = "Backup") {
+        SettingsSection(title = stringResource(R.string.section_backup)) {
             OutlinedCard(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
@@ -283,9 +288,9 @@ fun SettingsScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text("Create Backup", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.create_backup), style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        "Export all settings and pill history to a file",
+                        stringResource(R.string.create_backup_desc),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -300,9 +305,9 @@ fun SettingsScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text("Restore Backup", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.restore_backup), style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        "This will overwrite your current data",
+                        stringResource(R.string.restore_confirm_text),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -316,7 +321,7 @@ fun SettingsScreen(
 
         // ABOUT
         val uriHandler = LocalUriHandler.current
-        SettingsSection(title = "About") {
+        SettingsSection(title = stringResource(R.string.section_about)) {
 
             // Author
             Row(
@@ -328,7 +333,7 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Author",
+                    text = stringResource(R.string.author),
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
@@ -346,7 +351,7 @@ fun SettingsScreen(
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                    Text("View Repository", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.repository), style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
@@ -357,7 +362,7 @@ fun SettingsScreen(
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                    Text("Report an Issue", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.issues), style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
@@ -368,7 +373,7 @@ fun SettingsScreen(
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                    Text("License Info (GPL-3.0)", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.license), style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
@@ -381,7 +386,7 @@ fun SettingsScreen(
                     contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             ) {
-                Text("Support the Project ❤️")
+                Text(stringResource(R.string.support))
             }
         }
 
@@ -417,8 +422,8 @@ fun SettingsScreen(
                 @Suppress("AssignedValueIsNeverRead")
                 pendingRestoreUri = null
             },
-            title = { Text("Restore Backup?") },
-            text = { Text("This will replace all your current settings and pill history. This cannot be undone.") },
+            title = { Text(stringResource(R.string.restore_confirm_title)) },
+            text = { Text(stringResource(R.string.restore_confirm_text)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -430,7 +435,7 @@ fun SettingsScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )
-                ) { Text("Restore") }
+                ) { Text(stringResource(R.string.restore)) }
             },
             dismissButton = {
                 TextButton(onClick = {
@@ -438,7 +443,7 @@ fun SettingsScreen(
                     showRestoreConfirmDialog = false
                     @Suppress("AssignedValueIsNeverRead")
                     pendingRestoreUri = null
-                }) { Text("Cancel") }
+                }) { Text(stringResource(R.string.cancel)) }
             }
         )
     }
@@ -473,13 +478,13 @@ fun SettingsScreen(
                     }
                     @Suppress("AssignedValueIsNeverRead")
                     showDatePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.ok)) }
             },
             dismissButton = {
                 TextButton(onClick = {
                     @Suppress("AssignedValueIsNeverRead")
                     showDatePicker = false }
-                ) { Text("Cancel") }
+                ) { Text(stringResource(R.string.cancel)) }
             }
         ) {
             DatePicker(state = datePickerState)
@@ -576,7 +581,7 @@ private fun ColorPickerDialog(
                 modifier = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Text("Pick a Color", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.pick_color), style = MaterialTheme.typography.titleLarge)
 
                 SaturationValueBox(
                     hue = hue,
@@ -636,9 +641,9 @@ private fun ColorPickerDialog(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(onClick = onDismiss) { Text("Cancel") }
+                    TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
                     Spacer(Modifier.width(8.dp))
-                    Button(onClick = { onColorSelected(selectedColor) }) { Text("Select") }
+                    Button(onClick = { onColorSelected(selectedColor) }) { Text(stringResource(R.string.select)) }
                 }
             }
         }
@@ -755,7 +760,7 @@ private fun AddColorDot(onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Default.Add,
-            contentDescription = "Custom color",
+            contentDescription = stringResource(R.string.custom_color),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(20.dp)
         )
@@ -803,8 +808,8 @@ fun PermissionWarnings(modifier: Modifier = Modifier) {
     ) {
         if (!hasNotificationPermission) {
             WarningBanner(
-                text = "Notifications are disabled. The app won't be able to remind you.",
-                buttonText = "Enable",
+                text = stringResource(R.string.notifications_disabled),
+                buttonText = stringResource(R.string.enable),
                 onClick = {
                     val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                         putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
@@ -816,8 +821,8 @@ fun PermissionWarnings(modifier: Modifier = Modifier) {
 
         if (!hasExactAlarmPermission) {
             WarningBanner(
-                text = "Exact alarms are disabled. Reminders might not fire on time.",
-                buttonText = "Fix",
+                text = stringResource(R.string.exact_alarms_disabled),
+                buttonText = stringResource(R.string.fix),
                 onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {

@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.mariinkys.openPillReminder.model.PillLog
 import dev.mariinkys.openPillReminder.model.SettingsState
+import dev.mariinkys.openPillReminder.R
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,11 +42,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
     notificationEvents: Flow<String>,
 ) {
+    val locale = androidx.compose.ui.text.intl.Locale.current.platformLocale
+
     val pillLogs by viewModel.pillLogs.collectAsState()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy")
+    val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", locale)
     val firstDate = settings.firstPillDate
     val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1)
 
@@ -81,7 +85,7 @@ fun HomeScreen(
             val monthRangeText = if (firstVisibleDate.month == lastVisibleDate.month) {
                 firstVisibleDate.format(monthFormatter)
             } else {
-                "${firstVisibleDate.format(monthFormatter)} - ${lastVisibleDate.format(monthFormatter)}"
+                stringResource(R.string.date_range, firstVisibleDate.format(monthFormatter), lastVisibleDate.format(monthFormatter))
             }
 
             BoxWithConstraints(
@@ -169,8 +173,9 @@ fun PillBubble(
     size: Dp,
     onClick: () -> Unit
 ) {
-    val formatterDay = DateTimeFormatter.ofPattern("EEE")
-    val formatterDate = DateTimeFormatter.ofPattern("d")
+    val locale = androidx.compose.ui.text.intl.Locale.current.platformLocale
+    val formatterDay = DateTimeFormatter.ofPattern("EEE", locale)
+    val formatterDate = DateTimeFormatter.ofPattern("d", locale)
     val isToday = date == LocalDate.now()
 
     val colors = MaterialTheme.colorScheme
@@ -238,7 +243,8 @@ fun PillLogDialog(
 ) {
     var taken by remember(log.taken) { mutableStateOf(log.taken) }
     var note by remember(log.note) { mutableStateOf(log.note) }
-    val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d")
+    val locale = androidx.compose.ui.text.intl.Locale.current.platformLocale
+    val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d", locale)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -250,13 +256,19 @@ fun PillLogDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(if (isBreakDay) "Placebo taken" else "Pill taken")
+                    val label = if (isBreakDay) {
+                        stringResource(R.string.placebo_taken)
+                    } else {
+                        stringResource(R.string.pill_taken)
+                    }
+
+                    Text(label)
                     Switch(checked = taken, onCheckedChange = { taken = it })
                 }
                 OutlinedTextField(
                     value = note,
                     onValueChange = { note = it },
-                    label = { Text("Notes") },
+                    label = { Text(stringResource(R.string.notes)) },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 3
                 )
@@ -264,11 +276,11 @@ fun PillLogDialog(
         },
         confirmButton = {
             Button(onClick = { onSave(log.copy(taken = taken, note = note)) }) {
-                Text("Save")
+                Text(stringResource(R.string.save))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }

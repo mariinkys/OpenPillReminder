@@ -33,9 +33,11 @@ import dev.mariinkys.openPillReminder.ui.home.HomeScreen
 import dev.mariinkys.openPillReminder.ui.home.HomeViewModel
 import dev.mariinkys.openPillReminder.ui.settings.SettingsScreen
 import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
+import dev.mariinkys.openPillReminder.R
 import android.content.Context
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,8 +100,8 @@ fun AppLayout(
 
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf(
-        Pair("Home", Icons.Default.Home),
-        Pair("Settings", Icons.Default.Settings)
+        Pair(stringResource(R.string.home), Icons.Default.Home),
+        Pair(stringResource(R.string.settings), Icons.Default.Settings)
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -126,9 +128,13 @@ fun AppLayout(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         val topBarTitle = if (selectedTab == 0) {
-                            if (settings.userName.isNotBlank()) "Welcome, ${settings.userName}" else "Welcome"
+                            if (settings.userName.isNotBlank()) {
+                                stringResource(R.string.welcome_user, settings.userName)
+                            } else {
+                                stringResource(R.string.welcome)
+                            }
                         } else {
-                            "Settings"
+                            stringResource(R.string.settings)
                         }
 
                         Text(topBarTitle)
