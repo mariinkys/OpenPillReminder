@@ -30,7 +30,7 @@
 
 Open Pill Reminder is a simple and reliable way to stay on track with your birth control routine. Setup takes just a moment; select the type of pill pack you use (number of pills) and choose the time you usually take your pill. From there, Open Pill Reminder will send you discreet notifications so you never miss a dose. You can also easily view the status of your current pack at any time.
 
-Open Pill Reminder helps you manage your birth control routine with ease—simply, effectively, and for free (no ads too).
+Open Pill Reminder helps you manage your birth control routine with ease—simply, effectively, and for free (no ads either).
 
 Features:
 
