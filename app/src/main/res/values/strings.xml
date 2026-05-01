@@ -1,3 +1,89 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">OpenPillReminder</string>
+
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_user">Welcome, %1$s</string>
+
+    <!-- NOTIFICATIONS -->
+    <string name="channel_name">Pill Reminders</string>
+    <string name="channel_description">Daily pill reminder notifications</string>
+    <string name="notif_pill_title">Pill Reminder</string>
+    <string name="notif_placebo_title">Placebo Reminder</string>
+    <string name="notif_pill_msg">Time to take your pill%1$s!</string>
+    <string name="notif_placebo_msg">Time to take your placebo pill%1$s!</string>
+    <string name="notif_buy_title">Refill Reminder</string>
+    <string name="notif_buy_msg">Time to buy your next pack%1$s!</string>
+
+    <!-- HOME SCREEN -->
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="pill_taken">Pill taken</string>
+    <string name="placebo_taken">Placebo taken</string>
+    <string name="notes">Notes</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- SETTINGS SCREEN -->
+
+    <!-- Sections -->
+    <string name="section_profile">Profile</string>
+    <string name="section_pill_schedule">Pill Schedule</string>
+    <string name="section_buying_reminder">Pill Buying Reminder</string>
+    <string name="section_appearance">Appearance</string>
+    <string name="section_backup">Backup</string>
+    <string name="section_about">About</string>
+
+    <!-- Labels and Fields -->
+    <string name="your_name">Your name</string>
+    <string name="active_pills">Active Pills</string>
+    <string name="break_days">Break Days</string>
+    <string name="placebo_label">Placebo Pills on Break Days</string>
+    <string name="placebo_desc">Reminds you to take non-active pills so you don\'t lose the habit.</string>
+    <string name="first_pill_date">First Pill Date</string>
+    <string name="reminder_time">Reminder Time</string>
+    <string name="buying_reminder">Enable Buying Reminder</string>
+    <string name="reminder_day">Reminder Day</string>
+    <string name="theme_mode">Theme Mode</string>
+    <string name="material_you">Dynamic Color (Material You)</string>
+    <string name="accent_color">Accent Color</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="first_pill_day">On the first pill day</string>
+    <string name="day_before">1 day before</string>
+    <string name="two_days_before">2 days before</string>
+    <string name="three_days_before">3 days before</string>
+    <string name="four_days_before">4 days before</string>
+    <string name="five_days_before">5 days before</string>
+    <string name="six_days_before">6 days before</string>
+    <string name="seven_days_before">7days before</string>
+
+    <!-- Backup -->
+    <string name="create_backup">Create Backup</string>
+    <string name="create_backup_desc">Export all settings and pill history to a file</string>
+    <string name="restore_backup">Restore Backup</string>
+    <string name="restore_backup_desc">This will overwrite your current data</string>
+
+    <!-- Dialogs -->
+    <string name="restore_confirm_title">Restore Backup?</string>
+    <string name="restore_confirm_text">This will replace all your current settings and pill history. This cannot be undone.</string>
+    <string name="restore">Restore</string>
+    <string name="select">Select</string>
+    <string name="pick_color">Pick a Color</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="custom_color">Custom Color</string>
+
+    <!-- About -->
+    <string name="author">Author</string>
+    <string name="repository">View Repository</string>
+    <string name="issues">Report an Issue/Suggestion</string>
+    <string name="license">License Info (GPL-3.0)</string>
+    <string name="support">Support the Project ❤️</string>
+
+    <!-- Permissions Banners -->
+    <string name="notifications_disabled">Notifications are disabled. The app won\'t be able to remind you.</string>
+    <string name="exact_alarms_disabled">Exact alarms are disabled. Reminders might not fire on time.</string>
+    <string name="enable">Enable</string>
+    <string name="fix">Fix</string>
 </resources>

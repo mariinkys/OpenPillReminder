@@ -1,0 +1,89 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">OpenPillReminder</string>
+
+    <string name="home">Inicio</string>
+    <string name="settings">Ajustes</string>
+    <string name="welcome">Bienvienid@</string>
+    <string name="welcome_user">Bienvenid@, %1$s</string>
+
+    <!-- NOTIFICATIONS -->
+    <string name="channel_name">Recordatorios de pastillas</string>
+    <string name="channel_description">Notificaciones diarias para tomar la pastilla</string>
+    <string name="notif_pill_title">Recordatorio de pastilla</string>
+    <string name="notif_placebo_title">Recordatorio de placebo</string>
+    <string name="notif_pill_msg">¡Es hora de tomar tu pastilla%1$s!</string>
+    <string name="notif_placebo_msg">¡Es hora de tomar tu placebo%1$s!</string>
+    <string name="notif_buy_title">Recordatorio de compra</string>
+    <string name="notif_buy_msg">¡Es hora de comprar el siguiente paquete%1$s!</string>
+
+    <!-- HOME SCREEN -->
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="pill_taken">Pastilla tomada</string>
+    <string name="placebo_taken">Placebo tomado</string>
+    <string name="notes">Notas</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- SETTINGS SCREEN -->
+
+    <!-- Sections -->
+    <string name="section_profile">Perfil</string>
+    <string name="section_pill_schedule">Horario de pastillas</string>
+    <string name="section_buying_reminder">Recordatorio de compra</string>
+    <string name="section_appearance">Apariencia</string>
+    <string name="section_backup">Copia de seguridad</string>
+    <string name="section_about">Acerca de</string>
+
+    <!-- Labels and Fields -->
+    <string name="your_name">Tu nombre</string>
+    <string name="active_pills">Pastillas activas</string>
+    <string name="break_days">Días de descanso</string>
+    <string name="placebo_label">Placebos en días de descanso</string>
+    <string name="placebo_desc">Te recuerda tomar las pastillas placebo para no perder el hábito.</string>
+    <string name="first_pill_date">Fecha de la primera pastilla</string>
+    <string name="reminder_time">Hora del recordatorio</string>
+    <string name="buying_reminder">Activar recordatorio de compra</string>
+    <string name="reminder_day">Día del recordatorio</string>
+    <string name="theme_mode">Modo del tema</string>
+    <string name="material_you">Color dinámico (Material You)</string>
+    <string name="accent_color">Color de acento</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="first_pill_day">El día de la primera pastilla</string>
+    <string name="day_before">1 día antes</string>
+    <string name="two_days_before">2 días antes</string>
+    <string name="three_days_before">3 días antes</string>
+    <string name="four_days_before">4 días antes</string>
+    <string name="five_days_before">5 días antes</string>
+    <string name="six_days_before">6 días antes</string>
+    <string name="seven_days_before">7 días antes</string>
+
+    <!-- Backup -->
+    <string name="create_backup">Crear copia de seguridad</string>
+    <string name="create_backup_desc">Exportar ajustes e historial a un archivo</string>
+    <string name="restore_backup">Restaurar copia de seguridad</string>
+    <string name="restore_backup_desc">Esto sobrescribirá tus datos actuales</string>
+
+    <!-- Dialogs -->
+    <string name="restore_confirm_title">¿Restaurar copia de seguridad?</string>
+    <string name="restore_confirm_text">Se reemplazarán todos tus ajustes e historial. Esta acción no se puede deshacer.</string>
+    <string name="restore">Restaurar</string>
+    <string name="select">Seleccionar</string>
+    <string name="pick_color">Elegir un color</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">Aceptar</string>
+    <string name="custom_color">Color personalizado</string>
+
+    <!-- About -->
+    <string name="author">Autor</string>
+    <string name="repository">Ver repositorio</string>
+    <string name="issues">Informar de un error o sugerencia</string>
+    <string name="license">Información de licencia (GPL-3.0)</string>
+    <string name="support">Apoyar el proyecto ❤️</string>
+
+    <!-- Permissions Banners -->
+    <string name="notifications_disabled">Las notificaciones están desactivadas. La app no podrá enviarte recordatorios.</string>
+    <string name="exact_alarms_disabled">Las alarmas exactas están desactivadas. Es posible que los recordatorios no funcionen a tiempo.</string>
+    <string name="enable">Activar</string>
+    <string name="fix">Solucionar</string>
+</resources>

@@ -1,0 +1,89 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">OpenPillReminder</string>
+
+    <string name="home">ホーム</string>
+    <string name="settings">設定</string>
+    <string name="welcome">ようこそ</string>
+    <string name="welcome_user">%1$sさん、ようこそ</string>
+
+    <!-- NOTIFICATIONS -->
+    <string name="channel_name">服用のリマインダー</string>
+    <string name="channel_description">毎日の服用時間を通知します</string>
+    <string name="notif_pill_title">服用の時間です</string>
+    <string name="notif_placebo_title">プラセボ服用の時間です</string>
+    <string name="notif_pill_msg">%1$sお薬の時間ですよ！</string>
+    <string name="notif_placebo_msg">%1$sプラセボを飲む時間ですよ！</string>
+    <string name="notif_buy_title">購入リマインダー</string>
+    <string name="notif_buy_msg">%1$s新しいシートを購入する時間です！</string>
+
+    <!-- HOME SCREEN -->
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="pill_taken">服用済み</string>
+    <string name="placebo_taken">プラセボ服用済み</string>
+    <string name="notes">メモ</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
+
+    <!-- SETTINGS SCREEN -->
+
+    <!-- Sections -->
+    <string name="section_profile">プロフィール</string>
+    <string name="section_pill_schedule">服用スケジュール</string>
+    <string name="section_buying_reminder">購入リマインダー</string>
+    <string name="section_appearance">外観</string>
+    <string name="section_backup">バックアップ</string>
+    <string name="section_about">アプリについて</string>
+
+    <!-- Labels and Fields -->
+    <string name="your_name">名前</string>
+    <string name="active_pills">実薬の数</string>
+    <string name="break_days">休薬期間（日数）</string>
+    <string name="placebo_label">休薬期間中のプラセボ</string>
+    <string name="placebo_desc">服用習慣を維持するために、休薬期間中も偽薬（プラセボ）の服用を通知します。</string>
+    <string name="first_pill_date">服用開始日</string>
+    <string name="reminder_time">通知時刻</string>
+    <string name="buying_reminder">購入リマインダーを有効にする</string>
+    <string name="reminder_day">通知日</string>
+    <string name="theme_mode">テーマモード</string>
+    <string name="material_you">ダイナミックカラー (Material You)</string>
+    <string name="accent_color">アクセントカラー</string>
+    <string name="theme_system">システムの設定</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="first_pill_day">服用開始日の当日</string>
+    <string name="day_before">1日前</string>
+    <string name="two_days_before">2日前</string>
+    <string name="three_days_before">3日前</string>
+    <string name="four_days_before">4日前</string>
+    <string name="five_days_before">5日前</string>
+    <string name="six_days_before">6日前</string>
+    <string name="seven_days_before">7日前</string>
+
+    <!-- Backup -->
+    <string name="create_backup">バックアップを作成</string>
+    <string name="create_backup_desc">すべての設定と履歴をファイルに書き出します</string>
+    <string name="restore_backup">バックアップを復元</string>
+    <string name="restore_backup_desc">現在のデータはすべて上書きされます</string>
+
+    <!-- Dialogs -->
+    <string name="restore_confirm_title">バックアップを復元しますか？</string>
+    <string name="restore_confirm_text">現在の設定と服用履歴がすべて置き換えられます。この操作は取り消せません。</string>
+    <string name="restore">復元</string>
+    <string name="select">選択</string>
+    <string name="pick_color">色を選択</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">OK</string>
+    <string name="custom_color">カスタムカラー</string>
+
+    <!-- About -->
+    <string name="author">作者</string>
+    <string name="repository">リポジトリを表示</string>
+    <string name="issues">不具合・要望を報告</string>
+    <string name="license">ライセンス情報 (GPL-3.0)</string>
+    <string name="support">プロジェクトを支援する ❤️</string>
+
+    <!-- Permissions Banners -->
+    <string name="notifications_disabled">通知がオフになっています。リマインダーを受け取ることができません。</string>
+    <string name="exact_alarms_disabled">アラーム設定が無効です。通知が正確な時間に届かない可能性があります。</string>
+    <string name="enable">有効にする</string>
+    <string name="fix">修正</string>
+</resources>

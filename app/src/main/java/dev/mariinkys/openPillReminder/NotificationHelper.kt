@@ -13,17 +13,19 @@ const val CHANNEL_ID = "pill_reminder_channel"
 fun createNotificationChannel(context: Context) {
     val channel = NotificationChannel(
         CHANNEL_ID,
-        "Pill Reminders",
+        context.getString(R.string.channel_name),
         NotificationManager.IMPORTANCE_HIGH
     ).apply {
-        description = "Daily pill reminder notifications"
+        description = context.getString(R.string.channel_description)
     }
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     manager.createNotificationChannel(channel)
 }
 
 fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean, date: LocalDate) {
-    val title = if (isBreakDay) "Placebo Reminder" else "Pill Reminder"
+    val title = context.getString(
+        if (isBreakDay) R.string.notif_placebo_title else R.string.notif_pill_title
+    )
 
     val intent = Intent(context, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP // Don't restart the app if it's open
@@ -37,14 +39,12 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
-    val namePart = userName.trim().takeIf { it.isNotEmpty() }
-        ?.let { ", $it" }
-        ?: ""
+    val namePart = getLocalizedNamePart(context, userName)
 
-    val message = if (isBreakDay)
-        "Time to take your placebo pill$namePart!"
-    else
-        "Time to take your pill$namePart!"
+    val message = context.getString(
+        if (isBreakDay) R.string.notif_placebo_msg else R.string.notif_pill_msg,
+        namePart
+    )
 
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_stat_name)
@@ -60,16 +60,30 @@ fun sendPillNotification(context: Context, userName: String, isBreakDay: Boolean
 }
 
 fun sendBuyingNotification(context: Context, userName: String) {
-    val namePart = userName.trim().takeIf { it.isNotEmpty() }?.let { ", $it" } ?: ""
+    val namePart = getLocalizedNamePart(context, userName)
 
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_stat_name)
-        .setContentTitle("Refill Reminder")
-        .setContentText("Time to buy your next pack$namePart!")
+        .setContentTitle(context.getString(R.string.notif_buy_title))
+        .setContentText(context.getString(R.string.notif_buy_msg, namePart))
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setAutoCancel(true)
         .build()
 
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     manager.notify(2, notification)
+}
+
+fun getLocalizedNamePart(context: Context, userName: String): String {
+    val trimmedName = userName.trim()
+    if (trimmedName.isEmpty()) return ""
+
+    // get the current language code ("en", "es", "ja"...)
+    val currentLanguage = context.resources.configuration.locales[0].language
+
+    return if (currentLanguage == "ja") {
+        "${trimmedName}さん"
+    } else {
+        ", $trimmedName"
+    }
 }
