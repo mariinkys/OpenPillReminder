@@ -47,7 +47,7 @@
     <string name="theme_mode">テーマモード</string>
     <string name="material_you">ダイナミックカラー (Material You)</string>
     <string name="accent_color">アクセントカラー</string>
-    <string name="theme_system">システムの設定</string>
+    <string name="theme_system">システム</string>
     <string name="theme_light">ライト</string>
     <string name="theme_dark">ダーク</string>
     <string name="first_pill_day">服用開始日の当日</string>
