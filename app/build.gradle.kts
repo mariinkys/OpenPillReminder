@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "dev.mariinkys.openPillReminder"
 
-    buildToolsVersion = "35.0.0"
+    buildToolsVersion = "36.0.0"
 
     compileSdk {
         version = release(36) {

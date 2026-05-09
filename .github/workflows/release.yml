@@ -38,7 +38,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           # 1. Find build tools
-          BUILD_TOOLS_PATH=$ANDROID_HOME/build-tools/35.0.0
+          BUILD_TOOLS_PATH=$ANDROID_HOME/build-tools/36.0.0
           
           # 2. Decode keystore from the env variable
           echo "$SIGNING_KEY" | base64 -d > release.jks
