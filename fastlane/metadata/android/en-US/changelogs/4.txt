@@ -1,0 +1,4 @@
+- improv: Japanese translation
+- chore: change build tools jdk to 17 (match fdroid)
+- chore: updated screenshots
+- chore: updated dependencies
