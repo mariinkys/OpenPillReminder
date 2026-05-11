@@ -1,5 +1,6 @@
 package dev.mariinkys.openPillReminder.ui
 
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -35,10 +36,31 @@ import dev.mariinkys.openPillReminder.ui.settings.SettingsScreen
 import dev.mariinkys.openPillReminder.ui.settings.SettingsViewModel
 import dev.mariinkys.openPillReminder.R
 import android.content.Context
+import android.view.WindowManager
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.flow.Flow
+
+
+@Composable
+private fun SecureWindow(enabled: Boolean) {
+    val context = LocalContext.current
+    DisposableEffect(enabled) {
+        val window = (context as? Activity)?.window
+        if (enabled) {
+            window?.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        } else {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+        onDispose { }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +74,8 @@ fun AppLayout(
     val settings by settingsViewModel.uiState.collectAsState()
     val isLoaded by settingsViewModel.isLoaded.collectAsState()
     val showPermissions by settingsViewModel.showPermissionRequest.collectAsState(initial = false)
+
+    SecureWindow(enabled = settings.preventScreenshots)
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()

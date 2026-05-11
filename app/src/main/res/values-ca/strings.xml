@@ -33,6 +33,7 @@
     <string name="section_appearance">Aparença</string>
     <string name="section_backup">Còpia de seguretat</string>
     <string name="section_about">Sobre l\'App</string>
+    <string name="section_privacy">Privadesa</string>
 
     <!-- Labels and Fields -->
     <string name="your_name">El teu nom</string>
@@ -58,6 +59,10 @@
     <string name="five_days_before">5 dies abans</string>
     <string name="six_days_before">6 dies abans</string>
     <string name="seven_days_before">7 dies abans</string>
+
+    <!-- Privacy -->
+    <string name="prevent_screenshots">Evita les captures de pantalla</string>
+    <string name="prevent_screenshots_desc">Amaga l\'aplicació de la pantalla de recents i bloqueja les captures de pantalla</string>
 
     <!-- Backup -->
     <string name="create_backup">Crear còpia de seguretat</string>

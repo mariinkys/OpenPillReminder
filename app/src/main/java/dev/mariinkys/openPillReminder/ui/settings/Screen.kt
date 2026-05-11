@@ -229,6 +229,15 @@ fun SettingsScreen(
             }
         }
 
+        // PRIVACY
+        SettingsSection(title = stringResource(R.string.section_privacy)) {
+            SettingsSwitchRow(
+                label = stringResource(R.string.prevent_screenshots),
+                checked = settings.preventScreenshots,
+                onCheckedChange = { onSettingsChange(settings.copy(preventScreenshots = it)) },
+                description = stringResource(R.string.prevent_screenshots_desc)
+            )
+        }
 
         // APPEARANCE
         SettingsSection(title = stringResource(R.string.section_appearance)) {

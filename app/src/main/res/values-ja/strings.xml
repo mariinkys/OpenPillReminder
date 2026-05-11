@@ -33,6 +33,7 @@
     <string name="section_appearance">外観</string>
     <string name="section_backup">バックアップ</string>
     <string name="section_about">アプリについて</string>
+    <string name="section_privacy">プライバシー</string>
 
     <!-- Labels and Fields -->
     <string name="your_name">名前</string>
@@ -58,6 +59,10 @@
     <string name="five_days_before">5日前</string>
     <string name="six_days_before">6日前</string>
     <string name="seven_days_before">7日前</string>
+
+    <!-- Privacy -->
+    <string name="prevent_screenshots">スクリーンショットの防止</string>
+    <string name="prevent_screenshots_desc">最近使用したアプリ画面でアプリを非表示にし、スクリーンショットをブロックします</string>
 
     <!-- Backup -->
     <string name="create_backup">バックアップを作成</string>

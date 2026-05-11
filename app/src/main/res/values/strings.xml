@@ -33,6 +33,7 @@
     <string name="section_appearance">Appearance</string>
     <string name="section_backup">Backup</string>
     <string name="section_about">About</string>
+    <string name="section_privacy">Privacy</string>
 
     <!-- Labels and Fields -->
     <string name="your_name">Your name</string>
@@ -58,6 +59,10 @@
     <string name="five_days_before">5 days before</string>
     <string name="six_days_before">6 days before</string>
     <string name="seven_days_before">7days before</string>
+
+    <!-- Privacy -->
+    <string name="prevent_screenshots">Prevent Screenshots</string>
+    <string name="prevent_screenshots_desc">Hides the app from the recents screen and blocks screenshots</string>
 
     <!-- Backup -->
     <string name="create_backup">Create Backup</string>

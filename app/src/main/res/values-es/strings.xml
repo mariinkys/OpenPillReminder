@@ -33,6 +33,7 @@
     <string name="section_appearance">Apariencia</string>
     <string name="section_backup">Copia de seguridad</string>
     <string name="section_about">Acerca de</string>
+    <string name="section_privacy">Privacidad</string>
 
     <!-- Labels and Fields -->
     <string name="your_name">Tu nombre</string>
@@ -58,6 +59,10 @@
     <string name="five_days_before">5 días antes</string>
     <string name="six_days_before">6 días antes</string>
     <string name="seven_days_before">7 días antes</string>
+
+    <!-- Privacy -->
+    <string name="prevent_screenshots">Evitar capturas de pantalla</string>
+    <string name="prevent_screenshots_desc">Oculta la aplicación de la pantalla de aplicaciones recientes y bloquea las capturas de pantalla</string>
 
     <!-- Backup -->
     <string name="create_backup">Crear copia de seguridad</string>

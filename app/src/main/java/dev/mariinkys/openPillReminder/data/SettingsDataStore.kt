@@ -34,6 +34,7 @@ object SettingsKeys {
     val THEME_MODE = stringPreferencesKey("theme_mode")
     val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
     val SEED_COLOR = intPreferencesKey("seed_color")
+    val PREVENT_SCREENSHOTS = booleanPreferencesKey("prevent_screenshots")
 }
 
 class SettingsRepository(private val context: Context) {
@@ -60,7 +61,8 @@ class SettingsRepository(private val context: Context) {
             ),
             themeMode = ThemeMode.valueOf(prefs[SettingsKeys.THEME_MODE] ?: ThemeMode.SYSTEM.name),
             useDynamicColor = prefs[SettingsKeys.DYNAMIC_COLOR] ?: true,
-            seedColor = prefs[SettingsKeys.SEED_COLOR] ?: 0xFF6750A4.toInt()
+            seedColor = prefs[SettingsKeys.SEED_COLOR] ?: 0xFF6750A4.toInt(),
+            preventScreenshots = prefs[SettingsKeys.PREVENT_SCREENSHOTS] ?: false,
         )
     }
 
@@ -81,6 +83,7 @@ class SettingsRepository(private val context: Context) {
             prefs[SettingsKeys.THEME_MODE] = settings.themeMode.name
             prefs[SettingsKeys.DYNAMIC_COLOR] = settings.useDynamicColor
             prefs[SettingsKeys.SEED_COLOR] = settings.seedColor
+            prefs[SettingsKeys.PREVENT_SCREENSHOTS] = settings.preventScreenshots
         }
     }
 }

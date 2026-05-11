@@ -19,7 +19,8 @@ data class SettingsState(
     val buyingReminderTime: LocalTime = LocalTime.of(8, 0),
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val useDynamicColor: Boolean = true,
-    val seedColor: Int = 0xFF6750A4.toInt() // Material Purple
+    val seedColor: Int = 0xFF6750A4.toInt(), // Material Purple
+    val preventScreenshots: Boolean = false,
 )
 
 enum class ThemeMode {
