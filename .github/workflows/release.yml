@@ -28,34 +28,21 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Build Release APK
+      - name: Decode Keystore
+        run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > release.jks
+
+      - name: Build and Sign Release APK
+        env:
+          KEYSTORE_FILE: ${{ github.workspace }}/release.jks
+          KEY_ALIAS: ${{ secrets.ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease
 
-      - name: Sign and Align APK
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          ALIAS: ${{ secrets.ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      - name: Rename and Cleanup APK
         run: |
-          # 1. Find build tools
-          BUILD_TOOLS_PATH=$ANDROID_HOME/build-tools/36.0.0
-          
-          # 2. Decode keystore from the env variable
-          echo "$SIGNING_KEY" | base64 -d > release.jks
-          
-          # 3. Align the APK
-          $BUILD_TOOLS_PATH/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
-          
-          # 4. Sign the APK using env variables
-          $BUILD_TOOLS_PATH/apksigner sign --ks release.jks \
-            --ks-key-alias "$ALIAS" \
-            --ks-pass pass:"$KEY_PASSWORD" \
-            --key-pass pass:"$KEY_PASSWORD" \
-            --out OpenPillReminder-${{ github.event.inputs.tag_name }}.apk \
-            aligned.apk
-          
-          # 5. Cleanup
-          rm release.jks aligned.apk
+          mv app/build/outputs/apk/release/app-release.apk OpenPillReminder-${{ github.event.inputs.tag_name }}.apk
+          rm release.jks
 
       - name: Generate APK Hash
         id: generate_hash
@@ -73,7 +60,7 @@ jobs:
           files: OpenPillReminder-${{ github.event.inputs.tag_name }}.apk
           body: |
             <!-- Write changelog here -->
-
+            
             ---
             ### Security Verification
             **APK SHA-256 Hash:** `${{ steps.generate_hash.outputs.apk_sha }}`
