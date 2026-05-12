@@ -7,8 +7,10 @@
   ![GitHub Repo Stars](https://img.shields.io/github/stars/mariinkys/OpenPillReminder)
   ![GitHub Release](https://img.shields.io/github/v/release/mariinkys/OpenPillReminder)
   ![IzzyOnDroid Version](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/dev.mariinkys.OpenPillReminder&label=IzzyOnDroid)
-
-
+  
+  ![Minimum SDK](https://img.shields.io/badge/Minimum%20SDK-26%20(Android%2010)-839192?logo=android&logoColor=white)
+  ![Target SDK](https://img.shields.io/badge/Target%20SDK-36%20(Android%2016)-566573?logo=android&logoColor=white)
+  
   <h3>OpenPillReminder is an open source lady pill tracker for Android</h3>
 
   <img alt="Main Window" width="320" src="resources/screenshots/en/main-light.png"/>
