@@ -11,7 +11,7 @@
   ![Minimum SDK](https://img.shields.io/badge/Minimum%20SDK-26%20(Android%2010)-839192?logo=android&logoColor=white)
   ![Target SDK](https://img.shields.io/badge/Target%20SDK-36%20(Android%2016)-566573?logo=android&logoColor=white)
   
-  <h3>OpenPillReminder is an open source lady pill tracker for Android</h3>
+  <h3>OpenPillReminder is an open source lady pill (birth control) tracker for Android</h3>
 
   <img alt="Main Window" width="320" src="resources/screenshots/en/main-light.png"/>
   <img alt="Settings Window" width="320" src="resources/screenshots/en/settings-light.png"/>
