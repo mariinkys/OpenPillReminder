@@ -7,6 +7,7 @@
   ![GitHub Repo Stars](https://img.shields.io/github/stars/mariinkys/OpenPillReminder)
   ![GitHub Release](https://img.shields.io/github/v/release/mariinkys/OpenPillReminder)
   ![IzzyOnDroid Version](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/dev.mariinkys.OpenPillReminder&label=IzzyOnDroid)
+  ![F-Droid Version](https://img.shields.io/f-droid/v/dev.mariinkys.OpenPillReminder)
   
   ![Minimum SDK](https://img.shields.io/badge/Minimum%20SDK-26%20(Android%2010)-839192?logo=android&logoColor=white)
   ![Target SDK](https://img.shields.io/badge/Target%20SDK-36%20(Android%2016)-566573?logo=android&logoColor=white)
@@ -32,7 +33,7 @@
     <img src="resources/badges/badge_izzy.png" alt="Get it at IzzyOnDroid" height="122" />
   </a>
   <a href="https://f-droid.org/packages/dev.mariinkys.OpenPillReminder">
-    <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="120">
+    <img src="resources/badges/badge_fdroid.png" alt="Get it on F-Droid" height="120">
   </a>
 </a>
 
