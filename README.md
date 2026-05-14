@@ -31,6 +31,11 @@
   <a href="https://apt.izzysoft.de/packages/dev.mariinkys.OpenPillReminder">
     <img src="resources/badges/badge_izzy.png" alt="Get it at IzzyOnDroid" height="122" />
   </a>
+  <a href="https://f-droid.org/packages/dev.mariinkys.OpenPillReminder">
+    <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="120">
+  </a>
+</a>
+
 </div>
 
 ## App Description
