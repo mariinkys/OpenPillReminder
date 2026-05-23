@@ -8,10 +8,10 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 kotlin = "2.3.21"
-composeBom = "2026.05.00"
+composeBom = "2026.05.01"
 lifecycleViewmodelCompose = "2.10.0"
-animationCore = "1.11.1"
-foundation = "1.11.1"
+animationCore = "1.11.2"
+foundation = "1.11.2"
 
 [libraries]
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
