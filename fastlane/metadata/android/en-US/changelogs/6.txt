@@ -1,0 +1,2 @@
+- chore: changes to app title and description to make it more clear this app is meant to track only birth-control pills
+- chore: updated dependencies
