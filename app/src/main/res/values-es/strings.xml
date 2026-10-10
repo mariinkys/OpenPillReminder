@@ -23,6 +23,8 @@
     <string name="notes">Notas</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
+    <string name="pill_schedule_paused_title">Recordatorios Pausados</string>
+    <string name="pill_schedule_paused_message">No se enviarán recordatorios de pastillas ni de compra. Puedes volver a activarlos en Ajustes cuando quieras. Si tu ciclo ha cambiado, actualiza antes la fecha de la primera pastilla.</string>
 
     <!-- SETTINGS SCREEN -->
 
@@ -37,6 +39,9 @@
 
     <!-- Labels and Fields -->
     <string name="your_name">Tu nombre</string>
+    <string name="pill_reminder_enabled">Activar recordatorios de pastillas</string>
+    <string name="pill_reminder_enabled_desc">Los recordatorios están activos para el calendario de pastillas actual.</string>
+    <string name="pill_reminder_paused_desc">En pausa. Si tu ciclo ha cambiado, actualiza la fecha de la primera pastilla antes de activarlo.</string>
     <string name="active_pills">Pastillas activas</string>
     <string name="break_days">Días de descanso</string>
     <string name="placebo_label">Placebos en días de descanso</string>
@@ -44,6 +49,7 @@
     <string name="first_pill_date">Fecha de la primera pastilla</string>
     <string name="reminder_time">Hora del recordatorio</string>
     <string name="buying_reminder">Activar recordatorio de compra</string>
+    <string name="buying_reminder_paused_desc">Disponible después de activar los recordatorios de pastillas.</string>
     <string name="reminder_day">Día del recordatorio</string>
     <string name="theme_mode">Modo del tema</string>
     <string name="material_you">Color dinámico (Material You)</string>

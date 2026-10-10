@@ -23,6 +23,8 @@
     <string name="notes">Notes</string>
     <string name="save">Desar</string>
     <string name="cancel">Cancel·lar</string>
+    <string name="pill_schedule_paused_title">Recordatoris Pausats</string>
+    <string name="pill_schedule_paused_message">No s\'enviaran recordatoris de pastilles ni de compra. Pots tornar a activar-los a la Configuració quan vulguis. Si el teu cicle ha canviat, actualitza abans la data de la primera pastilla.</string>
 
     <!-- SETTINGS SCREEN -->
 
@@ -37,6 +39,9 @@
 
     <!-- Labels and Fields -->
     <string name="your_name">El teu nom</string>
+    <string name="pill_reminder_enabled">Activa els recordatoris de pastilles</string>
+    <string name="pill_reminder_enabled_desc">Els recordatoris estan actius per al calendari de pastilles actual.</string>
+    <string name="pill_reminder_paused_desc">En pausa. Si el teu cicle ha canviat, actualitza la data de la primera pastilla abans d\'activar-ho.</string>
     <string name="active_pills">Pastilles actives</string>
     <string name="break_days">Dies de descans</string>
     <string name="placebo_label">Placebos als dies de descans</string>
@@ -44,6 +49,7 @@
     <string name="first_pill_date">Data de la primera pastilla</string>
     <string name="reminder_time">Hora del recordatori</string>
     <string name="buying_reminder">Activar el recordatori de compra</string>
+    <string name="buying_reminder_paused_desc">Disponible després d\'activar els recordatoris de pastilles.</string>
     <string name="reminder_day">Dia del recordatori</string>
     <string name="theme_mode">Mode del tema</string>
     <string name="material_you">Color dinàmic (Material You)</string>

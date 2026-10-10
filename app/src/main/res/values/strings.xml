@@ -23,6 +23,8 @@
     <string name="notes">Notes</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="pill_schedule_paused_title">Reminders paused</string>
+    <string name="pill_schedule_paused_message">No pill or refill reminders will be sent. You can turn them back on in Settings at any time. If your cycle has changed, update the first pill date first.</string>
 
     <!-- SETTINGS SCREEN -->
 
@@ -37,6 +39,9 @@
 
     <!-- Labels and Fields -->
     <string name="your_name">Your name</string>
+    <string name="pill_reminder_enabled">Enable pill reminders</string>
+    <string name="pill_reminder_enabled_desc">Reminders are active for the current pill schedule.</string>
+    <string name="pill_reminder_paused_desc">Paused. If your cycle has changed, update the first pill date before turning this on.</string>
     <string name="active_pills">Active Pills</string>
     <string name="break_days">Break Days</string>
     <string name="placebo_label">Placebo Pills on Break Days</string>
@@ -44,6 +49,7 @@
     <string name="first_pill_date">First Pill Date</string>
     <string name="reminder_time">Reminder Time</string>
     <string name="buying_reminder">Enable Buying Reminder</string>
+    <string name="buying_reminder_paused_desc">Available after pill reminders are enabled.</string>
     <string name="reminder_day">Reminder Day</string>
     <string name="theme_mode">Theme Mode</string>
     <string name="material_you">Dynamic Color (Material You)</string>
@@ -58,7 +64,7 @@
     <string name="four_days_before">4 days before</string>
     <string name="five_days_before">5 days before</string>
     <string name="six_days_before">6 days before</string>
-    <string name="seven_days_before">7days before</string>
+    <string name="seven_days_before">7 days before</string>
 
     <!-- Privacy -->
     <string name="prevent_screenshots">Prevent Screenshots</string>

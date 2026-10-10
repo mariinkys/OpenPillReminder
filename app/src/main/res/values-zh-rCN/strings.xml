@@ -1,0 +1,97 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">吃药提醒</string>
+
+    <string name="home">首页</string>
+    <string name="settings">设置</string>
+    <string name="welcome">欢迎</string>
+    <string name="welcome_user">欢迎，%1$s</string>
+
+    <!-- 通知 -->
+    <string name="channel_name">服药提醒</string>
+    <string name="channel_description">每日服药提醒通知</string>
+    <string name="notif_pill_title">服药提醒</string>
+    <string name="notif_placebo_title">安慰剂提醒</string>
+    <string name="notif_pill_msg">该服用药片了%1$s！</string>
+    <string name="notif_placebo_msg">该服用安慰剂药片了%1$s！</string>
+    <string name="notif_buy_title">补充药品提醒</string>
+    <string name="notif_buy_msg">该购买下一盒药了%1$s！</string>
+
+    <!-- 首页 -->
+    <string name="date_range">%1$s - %2$s</string>
+    <string name="pill_taken">已服用药片</string>
+    <string name="placebo_taken">已服用安慰剂</string>
+    <string name="notes">备注</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="pill_schedule_paused_title">服药提醒已暂停</string>
+    <string name="pill_schedule_paused_message">当前不会发送服药或购药提醒。你可以随时在“设置”中重新启用。如果周期有变化，请先更新第一片药日期。</string>
+
+    <!-- 设置 -->
+    <string name="section_profile">个人资料</string>
+    <string name="section_pill_schedule">服药计划</string>
+    <string name="section_buying_reminder">购药提醒</string>
+    <string name="section_appearance">外观</string>
+    <string name="section_backup">备份</string>
+    <string name="section_about">关于</string>
+    <string name="section_privacy">隐私</string>
+
+    <string name="your_name">你的姓名</string>
+    <string name="pill_reminder_enabled">启用服药提醒</string>
+    <string name="pill_reminder_enabled_desc">正在按照当前服药计划发送提醒。</string>
+    <string name="pill_reminder_paused_desc">已暂停。如果周期有变化，请在启用前先更新第一片药日期。</string>
+    <string name="active_pills">有效药片天数</string>
+    <string name="break_days">停药天数</string>
+    <string name="placebo_label">停药日服用安慰剂</string>
+    <string name="placebo_desc">提醒你服用非有效药片，以保持服药习惯。</string>
+    <string name="first_pill_date">第一片药日期</string>
+    <string name="reminder_time">提醒时间</string>
+    <string name="buying_reminder">启用购药提醒</string>
+    <string name="buying_reminder_paused_desc">启用服药提醒后才会生效。</string>
+    <string name="reminder_day">提醒日</string>
+    <string name="theme_mode">主题模式</string>
+    <string name="material_you">动态颜色（Material You）</string>
+    <string name="accent_color">强调色</string>
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="first_pill_day">第一片药当天</string>
+    <string name="day_before">提前 1 天</string>
+    <string name="two_days_before">提前 2 天</string>
+    <string name="three_days_before">提前 3 天</string>
+    <string name="four_days_before">提前 4 天</string>
+    <string name="five_days_before">提前 5 天</string>
+    <string name="six_days_before">提前 6 天</string>
+    <string name="seven_days_before">提前 7 天</string>
+
+    <!-- 隐私 -->
+    <string name="prevent_screenshots">禁止截图</string>
+    <string name="prevent_screenshots_desc">从最近使用的应用中隐藏，并禁止截图</string>
+
+    <!-- 备份 -->
+    <string name="create_backup">创建备份</string>
+    <string name="create_backup_desc">将所有设置和服药历史导出到文件</string>
+    <string name="restore_backup">恢复备份</string>
+    <string name="restore_backup_desc">这将覆盖当前数据</string>
+
+    <!-- 对话框 -->
+    <string name="restore_confirm_title">恢复备份？</string>
+    <string name="restore_confirm_text">这将替换当前所有设置和服药历史，且无法撤销。</string>
+    <string name="restore">恢复</string>
+    <string name="select">选择</string>
+    <string name="pick_color">选择颜色</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">确定</string>
+    <string name="custom_color">自定义颜色</string>
+
+    <!-- 关于 -->
+    <string name="author">作者</string>
+    <string name="repository">查看代码仓库</string>
+    <string name="issues">报告问题/提出建议</string>
+    <string name="license">许可证信息（GPL-3.0）</string>
+    <string name="support">支持项目 ❤️</string>
+
+    <!-- 权限提示 -->
+    <string name="notifications_disabled">通知已关闭，应用将无法提醒你。</string>
+    <string name="exact_alarms_disabled">精确提醒已关闭，提醒可能无法按时触发。</string>
+    <string name="enable">启用</string>
+    <string name="fix">修复</string>
+</resources>

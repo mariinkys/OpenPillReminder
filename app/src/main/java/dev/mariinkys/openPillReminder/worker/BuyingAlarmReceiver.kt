@@ -19,10 +19,10 @@ class BuyingAlarmReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val settings = SettingsRepository(context).settingsFlow.first()
-                if (!settings.buyingReminder) return@launch
+                if (!settings.pillReminderEnabled || !settings.buyingReminder) return@launch
 
                 val today = LocalDate.now()
-                val cycleLength = (settings.activePills + settings.breakDays).toLong()
+                val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1).toLong()
                 val daysSinceStart = ChronoUnit.DAYS.between(settings.firstPillDate, today)
 
                 val daysBefore = settings.buyingReminderSchedule.ordinal.toLong()

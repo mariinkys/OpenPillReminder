@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import dev.mariinkys.openPillReminder.data.PillLogRepository
 import dev.mariinkys.openPillReminder.data.SettingsRepository
+import dev.mariinkys.openPillReminder.model.PillReminderPolicy
 import dev.mariinkys.openPillReminder.sendPillNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,25 +21,26 @@ class PillAlarmReceiver : BroadcastReceiver() {
             try {
                 val settings = SettingsRepository(context).settingsFlow.first()
 
-                val firstDate = settings.firstPillDate
                 val cycleLength = (settings.activePills + settings.breakDays).coerceAtLeast(1)
                 val today = LocalDate.now()
-                val daysSinceStart = java.time.temporal.ChronoUnit.DAYS.between(firstDate, today)
+                val daysSinceStart = java.time.temporal.ChronoUnit.DAYS.between(settings.firstPillDate, today)
+                val positionInCycle = (daysSinceStart % cycleLength).toInt()
+                val isBreakDay = daysSinceStart >= 0 && positionInCycle >= settings.activePills
 
-                if (daysSinceStart >= 0) {
-                    val positionInCycle = (daysSinceStart % cycleLength).toInt()
-                    val isBreakDay = positionInCycle >= settings.activePills
+                val todayLog = PillLogRepository(context).pillLogsFlow.first()[today]
+                val alreadyTaken = todayLog?.taken == true
 
-                    val todayLog = PillLogRepository(context).pillLogsFlow.first()[today]
-                    val alreadyTaken = todayLog?.taken == true
-
-                    if (!alreadyTaken && (!isBreakDay || settings.placebo)) {
-                        sendPillNotification(context, settings.userName, isBreakDay, today)
-                    }
+                if (PillReminderPolicy.shouldSend(settings, today, alreadyTaken)) {
+                    sendPillNotification(context, settings.userName, isBreakDay, today)
                 }
 
-                // schedule tomorrow's alarm
-                ReminderScheduler.schedulePillReminder(context, settings.reminderTime)
+                if (settings.pillReminderEnabled) {
+                    ReminderScheduler.schedulePillReminder(
+                        context,
+                        settings.reminderTime,
+                        settings.firstPillDate,
+                    )
+                }
             } finally {
                 pendingResult.finish()
             }

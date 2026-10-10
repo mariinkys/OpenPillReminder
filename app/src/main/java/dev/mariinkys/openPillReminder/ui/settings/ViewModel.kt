@@ -32,7 +32,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     // needed for showing the permissions only the first time the user opens the app
     val showPermissionRequest = combine(isLoaded, _uiState) { loaded, state ->
-        loaded && !state.hasRequestedPermissions
+        loaded && state.pillReminderEnabled && !state.hasRequestedPermissions
     }
 
     // BACKUP & RESTORE FUNC
@@ -70,11 +70,21 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private suspend fun saveToDisk(settings: SettingsState) {
         repository.saveSettings(settings)
-        ReminderScheduler.schedulePillReminder(getApplication(), settings.reminderTime)
 
-        if (settings.buyingReminder) {
-            ReminderScheduler.scheduleBuyingReminder(getApplication(), settings.buyingReminderTime)
+        if (settings.pillReminderEnabled) {
+            ReminderScheduler.schedulePillReminder(
+                getApplication(),
+                settings.reminderTime,
+                settings.firstPillDate,
+            )
+
+            if (settings.buyingReminder) {
+                ReminderScheduler.scheduleBuyingReminder(getApplication(), settings.buyingReminderTime)
+            } else {
+                ReminderScheduler.cancelBuyingAlarm(getApplication())
+            }
         } else {
+            ReminderScheduler.cancelPillAlarm(getApplication())
             ReminderScheduler.cancelBuyingAlarm(getApplication())
         }
 

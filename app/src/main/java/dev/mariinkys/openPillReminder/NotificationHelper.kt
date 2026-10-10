@@ -81,9 +81,15 @@ fun getLocalizedNamePart(context: Context, userName: String): String {
     // get the current language code ("en", "es", "ja"...)
     val currentLanguage = context.resources.configuration.locales[0].language
 
-    return if (currentLanguage == "ja") {
-        "${trimmedName}さん"
-    } else {
-        ", $trimmedName"
+    return when (currentLanguage) {
+        "ja" -> {
+            "${trimmedName}さん"
+        }
+        "zh" -> {
+            "，$trimmedName"
+        }
+        else -> {
+            ", $trimmedName"
+        }
     }
 }

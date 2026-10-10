@@ -9,6 +9,7 @@ import dev.mariinkys.openPillReminder.R
 data class SettingsState(
     val hasRequestedPermissions: Boolean = false,
     val userName: String = "",
+    val pillReminderEnabled: Boolean = false,
     val activePills: Int = 21,
     val breakDays: Int = 7,
     val placebo: Boolean = false,

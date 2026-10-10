@@ -23,6 +23,8 @@
     <string name="notes">メモ</string>
     <string name="save">保存</string>
     <string name="cancel">キャンセル</string>
+    <string name="pill_schedule_paused_title">リマインダーは一時停止中です</string>
+    <string name="pill_schedule_paused_message">ピルや補充のリマインダーは送信されません。「設定」からいつでも再開できます。周期が変わった場合は、先に服用開始日を更新してください。</string>
 
     <!-- SETTINGS SCREEN -->
 
@@ -37,6 +39,9 @@
 
     <!-- Labels and Fields -->
     <string name="your_name">名前</string>
+    <string name="pill_reminder_enabled">ピルのリマインダーを有効にする</string>
+    <string name="pill_reminder_enabled_desc">現在のピルのスケジュールに対してリマインダーが有効になっています。</string>
+    <string name="pill_reminder_paused_desc">一時停止中。周期が変わった場合は、有効にする前に服用開始日を更新してください。</string>
     <string name="active_pills">実薬の数</string>
     <string name="break_days">休薬期間（日数）</string>
     <string name="placebo_label">休薬期間中のプラセボ</string>
@@ -44,6 +49,7 @@
     <string name="first_pill_date">服用開始日</string>
     <string name="reminder_time">通知時刻</string>
     <string name="buying_reminder">購入リマインダーを有効にする</string>
+    <string name="buying_reminder_paused_desc">ピルのリマインダーを有効にすると利用可能になります。</string>
     <string name="reminder_day">通知日</string>
     <string name="theme_mode">テーマモード</string>
     <string name="material_you">ダイナミックカラー (Material You)</string>

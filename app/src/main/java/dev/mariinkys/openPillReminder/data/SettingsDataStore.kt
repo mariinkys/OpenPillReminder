@@ -21,6 +21,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 object SettingsKeys {
     val HAS_REQUESTED_PERMISSIONS = booleanPreferencesKey("has_requested_permissions")
     val USER_NAME = stringPreferencesKey("user_name")
+    val PILL_REMINDER_ENABLED = booleanPreferencesKey("pill_reminder_enabled")
     val ACTIVE_PILLS = intPreferencesKey("active_pills")
     val BREAK_DAYS = intPreferencesKey("break_days")
     val PLACEBO = booleanPreferencesKey("placebo")
@@ -43,6 +44,9 @@ class SettingsRepository(private val context: Context) {
         SettingsState(
             hasRequestedPermissions = prefs[SettingsKeys.HAS_REQUESTED_PERMISSIONS] ?: false,
             userName = prefs[SettingsKeys.USER_NAME] ?: "",
+            // Older releases scheduled reminders unconditionally, so keep them enabled on upgrade.
+            pillReminderEnabled = prefs[SettingsKeys.PILL_REMINDER_ENABLED]
+                ?: (prefs[SettingsKeys.HAS_REQUESTED_PERMISSIONS] == true),
             activePills = prefs[SettingsKeys.ACTIVE_PILLS] ?: 21,
             breakDays = prefs[SettingsKeys.BREAK_DAYS] ?: 7,
             placebo = prefs[SettingsKeys.PLACEBO] ?: false,
@@ -70,6 +74,7 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { prefs ->
             prefs[SettingsKeys.HAS_REQUESTED_PERMISSIONS] = settings.hasRequestedPermissions
             prefs[SettingsKeys.USER_NAME] = settings.userName
+            prefs[SettingsKeys.PILL_REMINDER_ENABLED] = settings.pillReminderEnabled
             prefs[SettingsKeys.ACTIVE_PILLS] = settings.activePills
             prefs[SettingsKeys.BREAK_DAYS] = settings.breakDays
             prefs[SettingsKeys.PLACEBO] = settings.placebo

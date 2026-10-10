@@ -51,6 +51,10 @@ object BackupManager {
                 SettingsKeys.USER_NAME.let { key ->
                     if (data.has(key.name)) prefs[key] = data.getString(key.name)
                 }
+                // Backups made before the pause toggle existed always had reminders on.
+                SettingsKeys.PILL_REMINDER_ENABLED.let { key ->
+                    prefs[key] = if (data.has(key.name)) data.getBoolean(key.name) else true
+                }
                 SettingsKeys.ACTIVE_PILLS.let { key ->
                     if (data.has(key.name)) prefs[key] = data.getInt(key.name)
                 }
@@ -89,6 +93,9 @@ object BackupManager {
                 }
                 SettingsKeys.SEED_COLOR.let { key ->
                     if (data.has(key.name)) prefs[key] = data.getInt(key.name)
+                }
+                SettingsKeys.PREVENT_SCREENSHOTS.let { key ->
+                    if (data.has(key.name)) prefs[key] = data.getBoolean(key.name)
                 }
 
                 // pill_logs is stored as a raw string

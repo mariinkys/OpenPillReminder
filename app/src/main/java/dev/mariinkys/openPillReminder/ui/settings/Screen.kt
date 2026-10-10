@@ -94,7 +94,9 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        PermissionWarnings()
+        if (settings.pillReminderEnabled) {
+            PermissionWarnings()
+        }
 
         // PROFILE
         SettingsSection(title = stringResource(R.string.section_profile)) {
@@ -109,6 +111,19 @@ fun SettingsScreen(
 
         // PILL SCHEDULE
         SettingsSection(title = stringResource(R.string.section_pill_schedule)) {
+            SettingsSwitchRow(
+                label = stringResource(R.string.pill_reminder_enabled),
+                checked = settings.pillReminderEnabled,
+                onCheckedChange = { onSettingsChange(settings.copy(pillReminderEnabled = it)) },
+                description = stringResource(
+                    if (settings.pillReminderEnabled) {
+                        R.string.pill_reminder_enabled_desc
+                    } else {
+                        R.string.pill_reminder_paused_desc
+                    }
+                ),
+            )
+
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 OutlinedTextField(
                     value = settings.activePills.toString(),
@@ -172,10 +187,16 @@ fun SettingsScreen(
             SettingsSwitchRow(
                 label = stringResource(R.string.buying_reminder),
                 checked = settings.buyingReminder,
-                onCheckedChange = { onSettingsChange(settings.copy(buyingReminder = it)) }
+                onCheckedChange = { onSettingsChange(settings.copy(buyingReminder = it)) },
+                description = if (settings.pillReminderEnabled) {
+                    null
+                } else {
+                    stringResource(R.string.buying_reminder_paused_desc)
+                },
+                enabled = settings.pillReminderEnabled,
             )
 
-            if (settings.buyingReminder) {
+            if (settings.pillReminderEnabled && settings.buyingReminder) {
                 var showBuyingScheduleMenu by remember { mutableStateOf(false) }
 
                 Row(
@@ -515,7 +536,13 @@ private fun SettingsSection(title: String, content: @Composable ColumnScope.() -
 }
 
 @Composable
-private fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, description: String? = null) {
+private fun SettingsSwitchRow(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    description: String? = null,
+    enabled: Boolean = true,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -526,19 +553,27 @@ private fun SettingsSwitchRow(label: String, checked: Boolean, onCheckedChange: 
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (enabled) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                },
             )
             if (description != null) {
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                        alpha = if (enabled) 1f else 0.38f
+                    ),
                 )
             }
         }
         Switch(
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            enabled = enabled,
         )
     }
 }

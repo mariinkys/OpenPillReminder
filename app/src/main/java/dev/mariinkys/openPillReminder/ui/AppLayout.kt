@@ -69,7 +69,7 @@ fun AppLayout(
     homeViewModel: HomeViewModel = viewModel(),
     notificationEvents: Flow<String>,
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
 
     val settings by settingsViewModel.uiState.collectAsState()
     val isLoaded by settingsViewModel.isLoaded.collectAsState()
@@ -185,6 +185,7 @@ fun AppLayout(
                 settings = settings,
                 modifier = Modifier.padding(innerPadding),
                 viewModel = homeViewModel,
+                onOpenSettings = { selectedTab = 1},
                 notificationEvents = notificationEvents,
             )
             1 -> SettingsScreen(
