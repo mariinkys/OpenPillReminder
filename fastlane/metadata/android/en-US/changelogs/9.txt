@@ -1,0 +1,4 @@
+- feat: add Simplified Chinese localization by @HaoranLI9 (#27)
+- feat: add pausable reminders by @HaoranLI9 and @mariinkys (#27)
+- fix: bugs regarding backup & restore
+- fix: reschedule reminders when exact alarm permission is granted
